@@ -7,32 +7,32 @@ import Main from '../components/Main';
 import theme from '../components/theme';
 
 export default class MyApp extends App {
-	componentDidMount() {
-		const jssStyles = document.querySelector('#jss-server-side');
-		if (jssStyles) {
-			jssStyles.parentElement!.removeChild(jssStyles);
-		}
-	}
+  componentDidMount() {
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles) {
+      jssStyles.parentElement!.removeChild(jssStyles);
+    }
+  }
 
-	render() {
-		const { Component, pageProps } = this.props;
+  render() {
+    const { Component, pageProps } = this.props;
 
-		return (
-			<React.Fragment>
-				<Head>
-					<title>WirVsVirusHack</title>
-					<meta
-						name="viewport"
-						content="minimum-scale=1, initial-scale=1, width=device-width"
-					/>
-				</Head>
-				<ThemeProvider theme={theme}>
-					<CssBaseline />
-					<Main>
-						<Component {...pageProps} />
-					</Main>
-				</ThemeProvider>
-			</React.Fragment>
-		);
-	}
+    return (
+      <React.Fragment>
+        <Head>
+          <title>WirVsVirusHack</title>
+          <meta
+            name="viewport"
+            content="minimum-scale=1, initial-scale=1, width=device-width"
+          />
+        </Head>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Main>
+            <Component {...pageProps} />
+          </Main>
+        </ThemeProvider>
+      </React.Fragment>
+    );
+  }
 }

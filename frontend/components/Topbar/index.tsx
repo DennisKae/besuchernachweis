@@ -6,23 +6,23 @@ import { TopbarProps } from '../../types';
 import useStyles from './style';
 
 const Topbar: React.FunctionComponent<TopbarProps> = ({ onMenuClick }) => {
-	const classes = useStyles();
-	return (
-		<AppBar className={classes.root}>
-			<Toolbar>
-				<Hidden mdDown>
-					<IconButton className={classes.signOutButton} color="inherit">
-						<InputIcon />
-					</IconButton>
-				</Hidden>
-				<Hidden lgUp>
-					<IconButton color="inherit" onClick={onMenuClick}>
-						<MenuIcon />
-					</IconButton>
-				</Hidden>
-			</Toolbar>
-		</AppBar>
-	);
+  const classes = useStyles();
+  return (
+    <AppBar className={classes.root}>
+      <Toolbar>
+        <Hidden mdDown>
+          <IconButton className={classes.signOutButton} color="inherit">
+            <InputIcon />
+          </IconButton>
+        </Hidden>
+        <Hidden lgUp>
+          <IconButton color="inherit" onClick={onMenuClick}>
+            <MenuIcon />
+          </IconButton>
+        </Hidden>
+      </Toolbar>
+    </AppBar>
+  );
 };
 
 export default Topbar;
