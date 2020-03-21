@@ -16,6 +16,9 @@
         <member name="M:Backend.WebApi.Controllers.BesucherController.GetAll">
             <summary>Liefert alle Besucher</summary>
         </member>
+        <member name="M:Backend.WebApi.Controllers.BesucherController.Add(Backend.Core.ViewModels.BesucherViewModel)">
+            <summary>Liefert alle Besucher</summary>
+        </member>
         <member name="M:Backend.WebApi.Controllers.GebaeudeController.GetAll">
             <summary>Liefert alle Gebäude</summary>
         </member>

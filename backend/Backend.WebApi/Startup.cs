@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using AutoMapper;
+using Backend.Core;
+using Backend.Core.Repositories;
 using Backend.Data;
-using Backend.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using NetCore.AutoRegisterDi;
 
 namespace Backend.WebApi
 {
@@ -49,7 +52,19 @@ namespace Backend.WebApi
 
             EnsureMigration();
 
-            services.InjectDependencies();
+            //services.InjectDependencies();
+            var assembliesToScan = new[]
+            {
+                Assembly.GetExecutingAssembly(),
+                Assembly.GetAssembly(typeof(UnitOfWork)),
+                Assembly.GetAssembly(typeof(DatabaseContext)),
+            };
+
+            services.RegisterAssemblyPublicNonGenericClasses(assembliesToScan)
+              .Where(c => c.Name.EndsWith("Service"))
+              .AsPublicImplementedInterfaces();
+
+            services.AddAutoMapper(assembliesToScan);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,8 +98,7 @@ namespace Backend.WebApi
         /// <summary>Führt die Migrationen der Datenbank aus.</summary>
         private void EnsureMigration()
         {
-            var configurationFileRepository = new ConfigurationFileRepository();
-            using (var databaseContext = new DatabaseContext(configurationFileRepository))
+            using (var databaseContext = new DatabaseContext())
             {
                 databaseContext.Database.Migrate();
             }

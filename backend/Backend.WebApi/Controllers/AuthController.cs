@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Backend.Core.Services.Interfaces;
 using Backend.Core.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,8 +14,14 @@ namespace Backend.WebApi.Controllers
     [ApiController]
     public class AuthController : BaseController<AuthController>
     {
-        public AuthController(ILogger<AuthController> logger) : base(logger)
+        private readonly IBenutzerService _benutzerService;
+
+
+        public AuthController(
+            ILogger<AuthController> logger,
+            IBenutzerService benutzerService) : base(logger)
         {
+            _benutzerService = benutzerService;
         }
 
         [HttpPost("[action]")]
@@ -24,7 +31,8 @@ namespace Backend.WebApi.Controllers
             return Execute(() =>
             {
                 _logger.LogDebug($"Login durch {loginViewModel?.Email}.");
-                return BenutzerViewModel.GetMock();
+                //return BenutzerViewModel.GetMock();
+                return _benutzerService.GetByEmail(loginViewModel?.Email);
             });
         }
 

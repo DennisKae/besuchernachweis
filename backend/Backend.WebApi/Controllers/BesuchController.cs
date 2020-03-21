@@ -51,5 +51,8 @@ namespace Backend.WebApi.Controllers
                 return new List<BesuchViewModel>() { BesuchViewModel.GetMock() };
             });
         }
+
+
+        // Endpunkt zum Besuch beenden
     }
 }
