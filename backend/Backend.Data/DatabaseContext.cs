@@ -21,7 +21,7 @@ namespace Backend.Data
 
         public DatabaseContext()
         {
-            _datenbankPfad = Environment.GetEnvironmentVariable("DATENBANKPFAD");
+            _datenbankPfad = EnvironmentVariableValues.Datenbankpfad;
         }
 
 

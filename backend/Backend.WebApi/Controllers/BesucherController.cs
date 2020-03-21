@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Backend.Core.Services;
 using Backend.Core.Services.Interfaces;
 using Backend.Core.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,8 +14,8 @@ using Microsoft.Extensions.Logging;
 namespace Backend.WebApi.Controllers
 {
 
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class BesucherController : BaseController<BesucherController>
     {
         private readonly IBesucherService _besucherService;
@@ -37,7 +38,7 @@ namespace Backend.WebApi.Controllers
             });
         }
 
-        /// <summary>Liefert alle Besucher</summary>
+        /// <summary>Erstellt einen neuen Besucher.</summary>
         [Route("")]
         [HttpPost]
         [ProducesResponseType(typeof(BesucherViewModel), StatusCodes.Status200OK)]

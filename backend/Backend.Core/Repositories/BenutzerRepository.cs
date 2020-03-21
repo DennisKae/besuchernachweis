@@ -29,5 +29,10 @@ namespace Backend.Core.Repositories
         {
             return _databaseContext.Benutzer.ToList();
         }
+
+        public void Update(Benutzer benutzer)
+        {
+            _databaseContext.Update(benutzer);
+        }
     }
 }

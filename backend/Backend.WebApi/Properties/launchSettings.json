@@ -23,7 +23,9 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "DATENBANKPFAD": "C:\\install\\Besuchernachweis\\Besuchernachweis.db",
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "APPSECRET": "GeheimesPasswort123",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "TOKENLIFETIME": "12"
       },
       "applicationUrl": "http://localhost:5000"
     },

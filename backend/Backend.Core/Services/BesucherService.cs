@@ -20,7 +20,6 @@ namespace Backend.Core.Services
         {
             using (var unit = new UnitOfWork())
             {
-                // TODO: Prüfen: Funktioniert das?
                 var besucherRepo = unit.GetRepository<BesucherRepository>();
                 var dbBesucher = _mapper.Map<Besucher>(besucherViewModel);
                 besucherRepo.AddBesucher(dbBesucher);

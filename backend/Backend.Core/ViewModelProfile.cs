@@ -15,6 +15,18 @@ namespace Backend.Core
         {
             CreateMap<BesucherViewModel, Besucher>()
                 .ReverseMap();
+
+            CreateMap<PersonViewModel, Person>()
+                .ReverseMap();
+
+            CreateMap<Benutzer, BenutzerViewModel>()
+                .ReverseMap();
+
+            CreateMap<Benutzer, LoginResultViewModel>()
+                .ReverseMap();
+
+            CreateMap<BenutzerViewModel, LoginResultViewModel>()
+                .ReverseMap();
         }
     }
 }
