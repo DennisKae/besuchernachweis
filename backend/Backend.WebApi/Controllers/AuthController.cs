@@ -18,6 +18,7 @@ namespace Backend.WebApi.Controllers
         }
 
         [HttpPost("[action]")]
+        [ProducesResponseType(typeof(LoginResultViewModel), StatusCodes.Status200OK)]
         public IActionResult Login(LoginViewModel loginViewModel)
         {
             return Execute(() =>
@@ -28,12 +29,13 @@ namespace Backend.WebApi.Controllers
         }
 
         [HttpPost("[action]")]
+        [ProducesResponseType(typeof(LoginResultViewModel), StatusCodes.Status200OK)]
         public IActionResult Register(BenutzerViewModel benutzerViewModel)
         {
             return Execute(() =>
             {
                 _logger.LogDebug($"Benutzerregistrierung durch {benutzerViewModel?.Person?.Email}.");
-                return BenutzerViewModel.GetMock();
+                return BenutzerViewModel.GetMock() as LoginResultViewModel;
             });
         }
     }

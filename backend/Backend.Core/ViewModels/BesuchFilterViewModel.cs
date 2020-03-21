@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Backend.Core.ViewModels
 {
-    public class ZugangsberechtigungViewModel
+    public class BesuchFilterViewModel
     {
-        public int Id { get; set; }
+        public DateTime DatumVon { get; set; }
 
-        public string Beschreibung { get; set; }
+        public DateTime DatumBis { get; set; }
     }
 }

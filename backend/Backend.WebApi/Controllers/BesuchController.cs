@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Backend.Core.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -18,11 +19,12 @@ namespace Backend.WebApi.Controllers
         /// <summary>Liefert alle Besuche</summary>
         [Route("")]
         [HttpGet]
+        [ProducesResponseType(typeof(List<BesuchViewModel>), StatusCodes.Status200OK)]
         public IActionResult GetAll()
         {
             return Execute(() =>
             {
-                return BesuchViewModel.GetMock();
+                return new List<BesuchViewModel>() { BesuchViewModel.GetMock() };
             });
         }
 
@@ -32,9 +34,22 @@ namespace Backend.WebApi.Controllers
         public IActionResult Create(NeuerBesuchViewModel neuerBesuchViewModel)
         {
             return Execute<string>(() =>
-              {
-                  return null;
-              });
+            {
+                // Startzeit serverseitig setzen
+                return null;
+            });
+        }
+
+        /// <summary>Liefert alle Besuche</summary>
+        [Route("[action]")]
+        [HttpGet]
+        [ProducesResponseType(typeof(List<BesuchViewModel>), StatusCodes.Status200OK)]
+        public IActionResult GetByFilter(BesuchFilterViewModel besuchFilterViewModel)
+        {
+            return Execute(() =>
+            {
+                return new List<BesuchViewModel>() { BesuchViewModel.GetMock() };
+            });
         }
     }
 }
