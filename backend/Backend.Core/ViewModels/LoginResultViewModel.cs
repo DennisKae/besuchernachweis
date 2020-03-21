@@ -10,5 +10,7 @@ namespace Backend.Core.ViewModels
     {
         /// <summary>JWT-Token</summary>
         public string Token { get; set; }
+
+        public DateTime TokenExpirationDate { get; set; }
     }
 }

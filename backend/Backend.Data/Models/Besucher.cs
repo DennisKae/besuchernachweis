@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Backend.Data.Models
 {
-    public class Benutzer
+    public class Besucher
     {
         [Key, Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,15 +18,6 @@ namespace Backend.Data.Models
 
         public Person Person { get; set; }
 
-        public string Passwort { get; set; }
-
-        public string Sicherheitsfrage { get; set; }
-
-        public string SicherheitsfrageAntwort { get; set; }
-
-        public string Rolle { get; set; }
-
-        public DateTime LetzterLogin { get; set; }
-
+        public string Gesundheitsstatus { get; set; }
     }
 }
