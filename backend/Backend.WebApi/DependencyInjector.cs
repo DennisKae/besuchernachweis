@@ -15,6 +15,8 @@ namespace Backend.WebApi
         public static void InjectDependencies(this IServiceCollection services)
         {
             services.AddSingleton<IConfigurationFileRepository, ConfigurationFileRepository>();
+
+
         }
     }
 }

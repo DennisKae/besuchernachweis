@@ -4,5 +4,11 @@
         <name>Backend.WebApi</name>
     </assembly>
     <members>
+        <member name="M:Backend.WebApi.DependencyInjector.InjectDependencies(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>Injiziert alle benötigten Dependencies</summary>
+        </member>
+        <member name="M:Backend.WebApi.Startup.EnsureMigration">
+            <summary>Führt die Migrationen der Datenbank aus.</summary>
+        </member>
     </members>
 </doc>

@@ -4,9 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Backend.Data;
+using Backend.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -44,17 +47,20 @@ namespace Backend.WebApi
                 c.IncludeXmlComments(xmlPath);
             });
 
+            EnsureMigration();
 
             services.InjectDependencies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            loggerFactory.AddLog4Net();
 
             app.UseRouting();
 
@@ -72,6 +78,16 @@ namespace Backend.WebApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", Assembly.GetExecutingAssembly().GetName().Name + " API V1");
             });
+        }
+
+        /// <summary>Führt die Migrationen der Datenbank aus.</summary>
+        private void EnsureMigration()
+        {
+            //var configurationFileRepository = new ConfigurationFileRepository();
+            //using (var databaseContext = new DatabaseContext(configurationFileRepository))
+            //{
+            //    databaseContext.Database.Migrate();
+            //}
         }
     }
 }
