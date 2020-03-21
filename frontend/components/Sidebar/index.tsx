@@ -1,13 +1,25 @@
 import * as React from 'react';
 import Link from 'next/link';
-import { Drawer, Divider, List, ListItem, Button } from '@material-ui/core';
+import { useRouter } from 'next/router';
+import {
+  Drawer,
+  Divider,
+  List,
+  ListItem,
+  Button,
+  Select,
+  MenuItem,
+} from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import InputIcon from '@material-ui/icons/Input';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import {
   SidebarProps,
   SidebarNavProps,
   SidebarListItemProps,
 } from '../../types';
+import useTranslations from '../../hooks/useTranslations';
+import { locales } from '../../utils/locales';
 import Profile from '../Profile';
 import useStyles from './style';
 
@@ -35,20 +47,43 @@ const Sidebar: React.FunctionComponent<SidebarProps> = ({
   onClose,
 }) => {
   const classes = useStyles();
+  const { locale } = useTranslations();
+  const router = useRouter();
 
   const items: Array<SidebarListItemProps> = [
     {
-      title: 'Besucher abmelden',
-      link: { href: '/' },
+      title: 'Dashboard',
+      link: {
+        href: `/[locale]`,
+        as: `/${locale}`,
+      },
       icon: <DashboardIcon />,
     },
-
     {
-      title: 'Besucher hinzufügen',
-      link: { href: '/visitor/create' },
+      title: 'Besucher anmelden',
+      link: {
+        href: `/[locale]/visitor/register`,
+        as: `/${locale}/visitor/register`,
+      },
       icon: <PersonAddIcon />,
     },
+    {
+      title: 'Besucher abmelden',
+      link: {
+        href: `/[locale]/visitor/cancle`,
+        as: `/${locale}/visitor/cancle`,
+      },
+      icon: <InputIcon />,
+    },
   ];
+
+  const handleLocaleChange = React.useCallback(
+    (val: string) => {
+      const regex = new RegExp(`^/(${locales.join('|')})`);
+      router.push(router.pathname, router.asPath.replace(regex, `/${val}`));
+    },
+    [router]
+  );
 
   return (
     <Drawer
@@ -59,6 +94,16 @@ const Sidebar: React.FunctionComponent<SidebarProps> = ({
       variant={variant}
     >
       <div className={classes.root}>
+        <Select
+          value={locale}
+          onChange={event => handleLocaleChange(event.target.value as string)}
+        >
+          {locales.map(locale => (
+            <MenuItem key={locale} value={locale}>
+              {locale.toUpperCase()}
+            </MenuItem>
+          ))}
+        </Select>
         <Profile name="Stephan Gilli" role="Angestellter" />
         <Divider />
         <SidebarNav items={items} />

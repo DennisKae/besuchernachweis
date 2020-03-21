@@ -13,6 +13,24 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
+          <style jsx global>{`
+            html {
+              height: 100%;
+              width: 100%;
+            }
+            body {
+              margin: 0;
+              padding: 0;
+              background: #f4f6f8;
+              height: 100%;
+              width: 100%;
+            }
+
+            #__next {
+              width: 100%;
+              height: 100%;
+            }
+          `}</style>
         </Head>
         <body>
           <Main />

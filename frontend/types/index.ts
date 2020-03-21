@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { locales } from '../utils/locales';
 import { LinkProps } from 'next/link';
 
 export type SidebarListItemProps = {
@@ -33,10 +34,6 @@ export type StatsCardProps = {
   value: string;
 };
 
-export type EnhancedTableToolbarProps = {
-  numSelected: number;
-};
-
 export type Visits = {
   id: string;
   startDate: React.ReactNode;
@@ -49,8 +46,16 @@ export type Visits = {
 
 export type VisitorTableRowProps = Visits;
 
+export type EnhancedTableToolbarProps = {
+  numSelected: number;
+};
+
+export type EnhancedTableHeadProps = {
+  cells: Array<string>;
+};
+
 export type EnhancedTableProps = {
-  rows: Array<VisitorTableRowProps>;
+  rows: Array<any>;
   rowsPerPageOptions: Array<number>;
   count: number;
   rowsPerPage: number;
@@ -62,6 +67,9 @@ export type EnhancedTableProps = {
   onChangeRowsPerPage: (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
+  displayOnly: boolean;
+  onClickRow: (val: any) => void;
+  buttonLabel?: string;
 };
 
 export type VisitorSearch = {
@@ -88,3 +96,10 @@ export type VisitorTableAction =
   | { type: 'changePage'; payload: { page: number; skip: number } }
   | { type: 'changeRowsPerPage'; payload: { limit: number } }
   | { type: 'setSearch'; payload: VisitorSearch };
+
+export type Locale = typeof locales[number];
+export type Strings = {
+  [key in Locale]: {
+    [key: string]: string;
+  };
+};

@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Grid, Typography, TextField, Input, Button } from '@material-ui/core';
 import useVisitorSearchReducer from '../../hooks/useVisitorSearchReducer';
+import useTranslations from '../../hooks/useTranslations';
 import Table from '../Table';
-import StatsCard from './StatsCard';
+import StatsCard from '../StatsCard';
 import useStyles from './style';
 
 const Dashboard: React.FunctionComponent = () => {
@@ -14,12 +15,13 @@ const Dashboard: React.FunctionComponent = () => {
     dispatch,
   } = reducer;
   const classes = useStyles();
+  const { t } = useTranslations();
   return (
     <div className={classes.root}>
       <Grid container spacing={4}>
         <Grid item xs={12} sm={6}>
-          <Typography variant="body1">Besucher</Typography>
-          <Typography variant="h6">Besucher abmelden</Typography>
+          <Typography variant="body1">{t('administration')}</Typography>
+          <Typography variant="h6">{t('visitor-cancle')}</Typography>
         </Grid>
         <Grid item xs={12} sm={6}>
           <Grid container justify="flex-start">
@@ -98,7 +100,7 @@ const Dashboard: React.FunctionComponent = () => {
             count={count}
             rowsPerPage={limit}
             page={page}
-            onChangePage={(_, newPage) => {
+            onChangePage={(_: any, newPage: number) => {
               const newSkip = newPage > page ? skip + limit : skip - limit;
               dispatch({
                 type: 'changePage',
@@ -109,6 +111,9 @@ const Dashboard: React.FunctionComponent = () => {
               const limit = Number(event.target.value);
               dispatch({ type: 'changeRowsPerPage', payload: { limit } });
             }}
+            displayOnly={false}
+            onClickRow={val => console.log(val)}
+            buttonLabel="Anmelden"
           />
         </Grid>
       </Grid>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Card, CardContent, Typography } from '@material-ui/core';
-import { StatsCardProps } from '../../../types';
+import { StatsCardProps } from '../../types';
 import useStyles from './style';
 
 const StatsCard: React.FunctionComponent<StatsCardProps> = ({
