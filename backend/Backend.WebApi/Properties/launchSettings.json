@@ -22,7 +22,10 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "DATENBANKPFAD": "C:\\install\\Besuchernachweis\\Besuchernachweis.db",
+        "APPSECRET": "GeheimesPasswort123",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "TOKENLIFETIME": "12"
       },
       "applicationUrl": "http://localhost:5000"
     },

@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Backend.Core.Services;
 using Backend.Core.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Backend.WebApi.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class BesuchController : BaseController<BesuchController>
     {
-        public BesuchController(ILogger<BesuchController> logger) : base(logger)
+        public BesuchController(
+            ILogger<BesuchController> logger) : base(logger)
         {
         }
 
@@ -51,5 +56,8 @@ namespace Backend.WebApi.Controllers
                 return new List<BesuchViewModel>() { BesuchViewModel.GetMock() };
             });
         }
+
+
+        // Endpunkt zum Besuch beenden
     }
 }

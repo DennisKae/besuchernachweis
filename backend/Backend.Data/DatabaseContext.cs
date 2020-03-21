@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Backend.Data.Models;
-using Backend.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Data
@@ -12,9 +7,13 @@ namespace Backend.Data
     public class DatabaseContext : DbContext
     {
         private readonly string _datenbankPfad;
-        private readonly IConfigurationFileRepository _configurationFileRepository;
 
+        public DbSet<Person> Person { get; set; }
         public DbSet<Benutzer> Benutzer { get; set; }
+        public DbSet<Besucher> Besucher { get; set; }
+        public DbSet<Konfiguration> Konfiguration { get; set; }
+        public DbSet<Gebaeude> Gebaeude { get; set; }
+        public DbSet<Raum> Raum { get; set; }
 
 
         public DatabaseContext(string datenbankPfad)
@@ -22,25 +21,106 @@ namespace Backend.Data
             _datenbankPfad = datenbankPfad;
         }
 
-        public DatabaseContext(
-            IConfigurationFileRepository configurationFileRepository)
+        public DatabaseContext()
         {
-            _configurationFileRepository = configurationFileRepository;
+            _datenbankPfad = EnvironmentVariableValues.Datenbankpfad;
         }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string datenbankPfad = _datenbankPfad;
-            if (string.IsNullOrWhiteSpace(datenbankPfad))
-            {
-                var dateiKonfiguration = _configurationFileRepository.GetConfigFromJsonFile<AllgemeineKonfiguration>();
-                Guard.IsNotNull(dateiKonfiguration, nameof(AllgemeineKonfiguration));
-                Guard.IsNotNull(dateiKonfiguration.Datenbankpfad, nameof(dateiKonfiguration.Datenbankpfad));
-                datenbankPfad = dateiKonfiguration.Datenbankpfad;
-            }
+            Guard.IsNotNull(_datenbankPfad, nameof(_datenbankPfad));
 
-            optionsBuilder.UseSqlite("Data Source=" + datenbankPfad);
+            optionsBuilder.UseSqlite("Data Source=" + _datenbankPfad);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder?.Entity<Person>(entity =>
+            {
+                entity.Property(x => x.SysStampIn).HasDefaultValueSql("datetime('now','localtime')");
+                entity.HasData(new Person[]{
+                    new Person
+                    {
+                        Id = 1,
+                        Name ="Mustermann",
+                        Vorname = "Max",
+                        Email = "max.mustermann@test.de",
+                        Telefon = "0561 123 4567",
+                        SysStampIn = new DateTime(2020,03,21,12,0,0)
+                    },
+                    new Person
+                    {
+                        Id = 2,
+                        Name ="Mustermann",
+                        Vorname = "Martina",
+                        Email = "martina.mustermann@test.de",
+                        Telefon = "0561 123 4568",
+                        SysStampIn = new DateTime(2020,03,21,12,1,0)
+                    }
+                });
+            });
+
+            modelBuilder.Entity<Benutzer>(entity =>
+            {
+                entity.HasData(new Benutzer[] {
+                new Benutzer
+                {
+                    Id = 1,
+                    Sicherheitsfrage = "Wie hieß Ihr erstes Haustier?",
+                    SicherheitsfrageAntwort = "Hundi",
+                    Rolle = "Pförtner",
+                    PersonId = 1
+                }});
+            });
+
+            modelBuilder.Entity<Besucher>(entity =>
+            {
+                entity.HasData(new Besucher[]{
+                    new Besucher
+                    {
+                        Id = 1,
+                        PersonId = 2,
+                        Gesundheitsstatus = "gesund"
+                    }
+                });
+            });
+
+            modelBuilder.Entity<Raum>(entity =>
+            {
+                entity.HasData(new Raum[]
+                {
+                    new Raum
+                    {
+                        Id = 1,
+                        Bezeichnung = "Raum 1.1",
+                        GebaeudeId = 1
+                    },
+                    new Raum
+                    {
+                        Id = 2,
+                        Bezeichnung = "Raum 2.2",
+                        GebaeudeId = 2
+                    }
+                });
+            });
+
+            modelBuilder.Entity<Gebaeude>(entity =>
+            {
+                entity.HasData(new Gebaeude[]
+                {
+                    new Gebaeude
+                    {
+                        Id = 1,
+                        Bezeichnung = "Gebäude 1"
+                    },
+                    new Gebaeude
+                    {
+                        Id = 2,
+                        Bezeichnung = "Gebäude 2"
+                    }
+                });
+            });
         }
     }
 }

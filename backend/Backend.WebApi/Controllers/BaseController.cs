@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Backend.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -23,11 +24,15 @@ namespace Backend.WebApi.Controllers
             {
                 return Ok(function());
             }
+            catch (CustomException customException)
+            {
+                return StatusCode(400, customException.Message);
+            }
             catch (Exception exception)
             {
                 _logger.LogCritical(exception, exception.Message);
 
-                return StatusCode(500, "Es sit ein unerwarteter Fehler aufgetreten.");
+                return StatusCode(500, "Es ist ein unerwarteter Fehler aufgetreten.");
             }
         }
     }
