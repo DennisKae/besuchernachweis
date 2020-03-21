@@ -18,6 +18,7 @@ export default class MyDocument extends Document {
               height: 100%;
               width: 100%;
             }
+
             body {
               margin: 0;
               padding: 0;

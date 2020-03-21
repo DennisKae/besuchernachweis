@@ -73,70 +73,68 @@ const EnhancedTable: React.FunctionComponent<EnhancedTableProps> = ({
   onClickRow,
   buttonLabel,
 }) => {
+  if (rows.length === 0) return null;
   const classes = useStyles();
-  if (rows.length) {
-    const cells = Object.keys(rows[0]);
-    return (
-      <div className={classes.root}>
-        <Paper className={classes.paper}>
-          <EnhancedTableToolbar />
-          <TableContainer>
-            <Table className={classes.table}>
-              <EnhancedTableHead cells={cells} />
-              <TableBody>
-                {rows.map((row, index) => {
-                  const keys = Object.keys(row);
-                  return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                      {keys.map((k, index) => {
-                        // @ts-ignore
-                        const value = formatValue(row[k]);
-                        if (keys.length + 1 === index && !displayOnly) {
-                          return (
-                            <EnhancedTableCell key={index}>
-                              <Button
-                                variant="outlined"
-                                color="secondary"
-                                onClick={() => {
-                                  if (row['ID']) onClickRow(row['ID']);
-                                }}
-                              >
-                                {buttonLabel}
-                              </Button>
-                            </EnhancedTableCell>
-                          );
-                        }
-
+  const cells = Object.keys(rows[0]);
+  return (
+    <div className={classes.root}>
+      <Paper className={classes.paper}>
+        <EnhancedTableToolbar />
+        <TableContainer>
+          <Table className={classes.table}>
+            <EnhancedTableHead cells={cells} />
+            <TableBody>
+              {rows.map((row, index) => {
+                const keys = Object.keys(row);
+                return (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                    {keys.map((k, index) => {
+                      // @ts-ignore
+                      const value = formatValue(row[k]);
+                      if (keys.length + 1 === index && !displayOnly) {
                         return (
                           <EnhancedTableCell key={index}>
-                            {value}
+                            <Button
+                              variant="outlined"
+                              color="secondary"
+                              onClick={() => {
+                                if (row['ID']) onClickRow(row['ID']);
+                              }}
+                            >
+                              {buttonLabel}
+                            </Button>
                           </EnhancedTableCell>
                         );
-                      })}
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={rowsPerPageOptions}
-            labelRowsPerPage="Datensätze pro Seite"
-            count={count}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            component="div"
-            onChangePage={onChangePage}
-            onChangeRowsPerPage={onChangeRowsPerPage}
-            labelDisplayedRows={({ from, to, count }) =>
-              `${from}-${to} von ${count}`
-            }
-          />
-        </Paper>
-      </div>
-    );
-  }
-  return null;
+                      }
+
+                      return (
+                        <EnhancedTableCell key={index}>
+                          {value}
+                        </EnhancedTableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={rowsPerPageOptions}
+          labelRowsPerPage="Datensätze pro Seite"
+          count={count}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          component="div"
+          onChangePage={onChangePage}
+          onChangeRowsPerPage={onChangeRowsPerPage}
+          labelDisplayedRows={({ from, to, count }) =>
+            `${from}-${to} von ${count}`
+          }
+        />
+      </Paper>
+    </div>
+  );
 };
 
 export default EnhancedTable;

@@ -1,5 +1,13 @@
 import * as React from 'react';
-import { Grid, Typography, TextField, Input, Button } from '@material-ui/core';
+import {
+  Grid,
+  Typography,
+  TextField,
+  Input,
+  Button,
+  Card,
+  CardContent,
+} from '@material-ui/core';
 import useVisitorSearchReducer from '../../hooks/useVisitorSearchReducer';
 import useTranslations from '../../hooks/useTranslations';
 import Table from '../Table';
@@ -20,36 +28,14 @@ const Dashboard: React.FunctionComponent = () => {
     <div className={classes.root}>
       <Grid container spacing={4}>
         <Grid item xs={12} sm={6}>
-          <Typography variant="body1">{t('administration')}</Typography>
-          <Typography variant="h6">{t('visitor-cancle')}</Typography>
+          <Typography variant="body1" translation-id="administraton">
+            {t('administration')}
+          </Typography>
+          <Typography variant="h6" translation-id="visitor-cancle">
+            {t('visitor-cancle')}
+          </Typography>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <Grid container justify="flex-start">
-            <TextField
-              style={{ paddingRight: '12px' }}
-              label={t('search-start-date')}
-              type="datetime-local"
-              defaultValue={search.startDate}
-              onChange={event =>
-                dispatch({
-                  type: 'setSearch',
-                  payload: { ...search, startDate: event.target.value },
-                })
-              }
-            />
-            <TextField
-              label={t('search-end-date')}
-              type="datetime-local"
-              defaultValue={search.endDate}
-              onChange={event => {
-                dispatch({
-                  type: 'setSearch',
-                  payload: { ...search, endDate: event.target.value },
-                });
-              }}
-            />
-          </Grid>
-        </Grid>
+        <Grid item xs={12} sm={6}></Grid>
       </Grid>
       <Grid container spacing={4}>
         <Grid item xs={12} sm={6} lg={3} xl={3}>
@@ -59,37 +45,72 @@ const Dashboard: React.FunctionComponent = () => {
           <StatsCard title={t('visitor-count-current-registered')} value="3" />
         </Grid>
         <Grid item xs={12} sm={6} lg={3} xl={3} alignItems="center">
-          <Input
-            placeholder={t('search-name')}
-            style={{
-              width: '100%',
-            }}
-            value={search.firstName}
-            onChange={event =>
-              dispatch({
-                type: 'setSearch',
-                payload: { ...search, firstName: event.target.value },
-              })
-            }
-          />
-          <div style={{ marginTop: '8px' }} />
-          <Input
-            placeholder={t('search-first-name')}
-            style={{
-              width: '100%',
-            }}
-            value={search.name}
-            onChange={event =>
-              dispatch({
-                type: 'setSearch',
-                payload: { ...search, name: event.target.value },
-              })
-            }
-          />
-          <div style={{ marginTop: '8px' }} />
-          <Button variant="contained" color="primary">
-            {t('search-apply')}
-          </Button>
+          <Card>
+            <CardContent>
+              <Input
+                placeholder={t('search-name')}
+                style={{
+                  width: '100%',
+                }}
+                value={search.firstName}
+                onChange={event =>
+                  dispatch({
+                    type: 'setSearch',
+                    payload: { ...search, firstName: event.target.value },
+                  })
+                }
+              />
+              <div style={{ marginTop: '8px' }} />
+              <Input
+                placeholder={t('search-first-name')}
+                style={{
+                  width: '100%',
+                }}
+                value={search.name}
+                onChange={event =>
+                  dispatch({
+                    type: 'setSearch',
+                    payload: { ...search, name: event.target.value },
+                  })
+                }
+              />
+              <div style={{ marginTop: '8px' }} />
+              <Button variant="contained" color="primary">
+                {t('search-apply')}
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6} lg={3} xl={3} alignItems="center">
+          <Card>
+            <CardContent>
+              <Grid container justify="flex-start">
+                <TextField
+                  style={{ paddingRight: '12px' }}
+                  label={t('search-start-date')}
+                  type="datetime-local"
+                  defaultValue={search.startDate}
+                  onChange={event =>
+                    dispatch({
+                      type: 'setSearch',
+                      payload: { ...search, startDate: event.target.value },
+                    })
+                  }
+                />
+                <TextField
+                  label={t('search-end-date')}
+                  type="datetime-local"
+                  defaultValue={search.endDate}
+                  onChange={event => {
+                    dispatch({
+                      type: 'setSearch',
+                      payload: { ...search, endDate: event.target.value },
+                    });
+                  }}
+                />
+              </Grid>
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
       <Grid container spacing={4}>

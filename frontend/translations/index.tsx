@@ -14,6 +14,13 @@ const t: Strings = {
     'search-apply': 'Search',
     'navigation-register-visitor': 'Register visitor',
     'navigation-cancle-visitor': 'Cancle visitor',
+    'navigation-property-management': 'Buildings & Rooms',
+    'view-rooms': 'View rooms',
+    edit: 'Edit',
+    delete: 'delete',
+    yes: 'Yes',
+    no: 'No',
+    'are-you-sure-to-delete': 'Are you sure you want to delete that?',
   },
   de: {
     administration: 'Verwaltung',
@@ -28,6 +35,13 @@ const t: Strings = {
     'search-apply': 'Suchen',
     'navigation-register-visitor': 'Besucher anmelden',
     'navigation-cancle-visitor': 'Besucher abmelden',
+    'navigation-property-management': 'Gebäude & Räume',
+    'view-rooms': 'Räume ansehen',
+    edit: 'Bearbeiten',
+    delete: 'Löschen',
+    yes: 'Ja',
+    no: 'Nein',
+    'are-you-sure-to-delete': 'Sind Sie sicher, dass Sie das löschen möchten?',
   },
 };
 

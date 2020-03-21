@@ -13,6 +13,7 @@ import {
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import InputIcon from '@material-ui/icons/Input';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import DomainIcon from '@material-ui/icons/Domain';
 import {
   SidebarProps,
   SidebarNavProps,
@@ -27,8 +28,8 @@ const SidebarNav: React.FunctionComponent<SidebarNavProps> = ({ items }) => {
   const classes = useStyles();
   return (
     <List className={classes.nav}>
-      {items.map(item => (
-        <ListItem className={classes.item} disableGutters key={item.title}>
+      {items.map((item, index) => (
+        <ListItem className={classes.item} disableGutters key={index}>
           <Link href={item.link.href} as={item.link.as}>
             <Button className={classes.button}>
               <div className={classes.icon}>{item.icon}</div>
@@ -74,6 +75,14 @@ const Sidebar: React.FunctionComponent<SidebarProps> = ({
         as: `/${locale}/visitor/cancle`,
       },
       icon: <InputIcon />,
+    },
+    {
+      title: t('navigation-property-management'),
+      link: {
+        href: `/[locale]/property`,
+        as: `/${locale}/property`,
+      },
+      icon: <DomainIcon />,
     },
   ];
 

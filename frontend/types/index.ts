@@ -3,7 +3,7 @@ import { locales } from '../utils/locales';
 import { LinkProps } from 'next/link';
 
 export type SidebarListItemProps = {
-  title: string;
+  title: React.ReactNode;
   link: LinkProps;
   icon: React.ReactNode;
 };
@@ -30,7 +30,7 @@ export type ProfileProps = {
 };
 
 export type StatsCardProps = {
-  title: string;
+  title: React.ReactNode;
   value: string;
 };
 
@@ -88,6 +88,30 @@ export type VisitorTableState = {
   search: VisitorSearch;
 };
 
+export type PropertyCardProps = {
+  id: string;
+  title: string;
+  onViewClick?: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
+  onEditClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onDeleteClick: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
+  isActive?: boolean;
+};
+
+export type RoomProps = {
+  id: string;
+  title: string;
+};
+
+export type PropertyProps = {
+  id: string;
+  title: string;
+  rooms: Array<RoomProps>;
+};
+
 export type VisitorTableAction =
   | {
       type: 'setVisitors';
@@ -102,4 +126,23 @@ export type Strings = {
   [key in Locale]: {
     [key: string]: string;
   };
+};
+
+export type ModalProps = {
+  open: boolean;
+  onClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
+};
+
+export type EditModalContentProps = {
+  id: string;
+  title: string;
+  onSaveClick: (props: { title: string; id: string }) => void;
+  onExitClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+};
+
+export type DialogProps = ModalProps & {
+  title?: string;
+  content?: string;
+  onAgree: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onDisagree: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
