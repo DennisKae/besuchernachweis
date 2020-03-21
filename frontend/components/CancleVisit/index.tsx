@@ -27,7 +27,7 @@ const Dashboard: React.FunctionComponent = () => {
           <Grid container justify="flex-start">
             <TextField
               style={{ paddingRight: '12px' }}
-              label="Startdatum"
+              label={t('search-start-date')}
               type="datetime-local"
               defaultValue={search.startDate}
               onChange={event =>
@@ -38,7 +38,7 @@ const Dashboard: React.FunctionComponent = () => {
               }
             />
             <TextField
-              label="Enddatum"
+              label={t('search-end-date')}
               type="datetime-local"
               defaultValue={search.endDate}
               onChange={event => {
@@ -53,14 +53,14 @@ const Dashboard: React.FunctionComponent = () => {
       </Grid>
       <Grid container spacing={4}>
         <Grid item xs={12} sm={6} lg={3} xl={3}>
-          <StatsCard title="Anzahl Besucher im Zeitraum" value="200" />
+          <StatsCard title={t('visitor-count-for-period')} value="200" />
         </Grid>
         <Grid item xs={12} sm={6} lg={3} xl={3}>
-          <StatsCard title="Anzahl angemeldeter Besucher" value="3" />
+          <StatsCard title={t('visitor-count-current-registered')} value="3" />
         </Grid>
         <Grid item xs={12} sm={6} lg={3} xl={3} alignItems="center">
           <Input
-            placeholder="Vorname"
+            placeholder={t('search-name')}
             style={{
               width: '100%',
             }}
@@ -74,7 +74,7 @@ const Dashboard: React.FunctionComponent = () => {
           />
           <div style={{ marginTop: '8px' }} />
           <Input
-            placeholder="Name"
+            placeholder={t('search-first-name')}
             style={{
               width: '100%',
             }}
@@ -88,7 +88,7 @@ const Dashboard: React.FunctionComponent = () => {
           />
           <div style={{ marginTop: '8px' }} />
           <Button variant="contained" color="primary">
-            Suchen
+            {t('search-apply')}
           </Button>
         </Grid>
       </Grid>
@@ -113,7 +113,7 @@ const Dashboard: React.FunctionComponent = () => {
             }}
             displayOnly={false}
             onClickRow={val => console.log(val)}
-            buttonLabel="Anmelden"
+            buttonLabel="Abmelden"
           />
         </Grid>
       </Grid>

@@ -47,7 +47,7 @@ const Sidebar: React.FunctionComponent<SidebarProps> = ({
   onClose,
 }) => {
   const classes = useStyles();
-  const { locale } = useTranslations();
+  const { locale, t } = useTranslations();
   const router = useRouter();
 
   const items: Array<SidebarListItemProps> = [
@@ -60,7 +60,7 @@ const Sidebar: React.FunctionComponent<SidebarProps> = ({
       icon: <DashboardIcon />,
     },
     {
-      title: 'Besucher anmelden',
+      title: t('navigation-register-visitor'),
       link: {
         href: `/[locale]/visitor/register`,
         as: `/${locale}/visitor/register`,
@@ -68,7 +68,7 @@ const Sidebar: React.FunctionComponent<SidebarProps> = ({
       icon: <PersonAddIcon />,
     },
     {
-      title: 'Besucher abmelden',
+      title: t('navigation-cancle-visitor'),
       link: {
         href: `/[locale]/visitor/cancle`,
         as: `/${locale}/visitor/cancle`,
