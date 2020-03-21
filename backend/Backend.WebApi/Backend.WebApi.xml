@@ -7,11 +7,11 @@
         <member name="M:Backend.WebApi.Controllers.BesuchController.GetAll">
             <summary>Liefert alle Besuche</summary>
         </member>
-        <member name="M:Backend.WebApi.Controllers.BesuchController.GetByFilter(Backend.Core.ViewModels.BesuchFilterViewModel)">
-            <summary>Liefert alle Besuche</summary>
-        </member>
         <member name="M:Backend.WebApi.Controllers.BesuchController.Create(Backend.Core.ViewModels.NeuerBesuchViewModel)">
             <summary>Speichert einen neuen Besuch</summary>
+        </member>
+        <member name="M:Backend.WebApi.Controllers.BesuchController.GetByFilter(Backend.Core.ViewModels.BesuchFilterViewModel)">
+            <summary>Liefert alle Besuche</summary>
         </member>
         <member name="M:Backend.WebApi.Controllers.BesucherController.GetAll">
             <summary>Liefert alle Besucher</summary>

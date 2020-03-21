@@ -83,11 +83,11 @@ namespace Backend.WebApi
         /// <summary>Führt die Migrationen der Datenbank aus.</summary>
         private void EnsureMigration()
         {
-            //var configurationFileRepository = new ConfigurationFileRepository();
-            //using (var databaseContext = new DatabaseContext(configurationFileRepository))
-            //{
-            //    databaseContext.Database.Migrate();
-            //}
+            var configurationFileRepository = new ConfigurationFileRepository();
+            using (var databaseContext = new DatabaseContext(configurationFileRepository))
+            {
+                databaseContext.Database.Migrate();
+            }
         }
     }
 }
