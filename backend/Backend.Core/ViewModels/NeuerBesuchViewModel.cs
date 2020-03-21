@@ -9,10 +9,6 @@ namespace Backend.Core.ViewModels
 {
     public class NeuerBesuchViewModel
     {
-        [Required]
-        public DateTime Startzeit { get; set; }
-
-        public DateTime Endzeit { get; set; }
 
         /// <summary>Benutzer-IDs der Besucher</summary>
         [Required]

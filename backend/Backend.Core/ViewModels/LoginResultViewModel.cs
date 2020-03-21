@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Backend.Core.ViewModels
 {
-    public class ZugangsberechtigungViewModel
+    public class LoginResultViewModel : BenutzerViewModel
     {
-        public int Id { get; set; }
-
-        public string Beschreibung { get; set; }
+        /// <summary>JWT-Token</summary>
+        public string Token { get; set; }
     }
 }
