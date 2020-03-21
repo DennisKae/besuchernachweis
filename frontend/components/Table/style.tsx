@@ -39,5 +39,8 @@ export default makeStyles((theme: Theme) =>
     table: {
       minWidth: 750,
     },
+    cell: {
+      padding: '0 16px',
+    },
   })
 );

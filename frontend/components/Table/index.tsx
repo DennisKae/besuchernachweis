@@ -1,5 +1,4 @@
 import * as React from 'react';
-import clsx from 'clsx';
 import {
   Table,
   TableBody,
@@ -11,60 +10,54 @@ import {
   Toolbar,
   Typography,
   Paper,
-  Checkbox,
+  Button,
 } from '@material-ui/core';
-import {
-  VisitorTableRowProps,
-  EnhancedTableToolbarProps,
-  EnhancedTableProps,
-} from '../../types';
+import { VisitorTableRowProps, EnhancedTableProps } from '../../types';
 import useStyles, { useToolbarStyles } from './style';
 
-type EnhancedTableHeadProps = {
-  onSelectAllClick: (
-    event: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean
-  ) => void;
-  numSelected: number;
-  rowCount: number;
-};
-
-const cells: Array<Pick<VisitorTableRowProps, 'id'>> = [
+const cells: Array<Pick<VisitorTableRowProps, 'id'> & {
+  key: string | null;
+}> = [
   {
     id: 'ID',
+    key: 'id',
   },
   {
     id: 'Beginn',
+    key: 'startDate',
   },
   {
     id: 'Ende',
+    key: 'endDate',
   },
   {
     id: 'Name',
+    key: 'name',
   },
   {
     id: 'Vorname',
+    key: 'firstName',
   },
   {
     id: 'E-Mail',
+    key: 'email',
+  },
+  {
+    id: 'Räume',
+    key: 'rooms',
+  },
+  {
+    id: '',
+    key: 'action',
   },
 ];
 
-const EnhancedTableHead: React.FunctionComponent<EnhancedTableHeadProps> = ({
-  onSelectAllClick,
-  numSelected,
-  rowCount,
-}) => {
+const cellKeys = cells.map(cell => cell.key);
+
+const EnhancedTableHead: React.FunctionComponent = () => {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-          />
-        </TableCell>
         {cells.map(cell => (
           <TableCell key={cell.id} align="left" padding="default">
             {cell.id}
@@ -75,126 +68,78 @@ const EnhancedTableHead: React.FunctionComponent<EnhancedTableHeadProps> = ({
   );
 };
 
-const EnhancedTableToolbar: React.FunctionComponent<EnhancedTableToolbarProps> = ({
-  numSelected,
-}) => {
+const EnhancedTableToolbar: React.FunctionComponent = () => {
   const classes = useToolbarStyles();
   return (
-    <Toolbar
-      className={clsx(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          className={classes.title}
-          color="inherit"
-          variant="subtitle1"
-        >
-          {numSelected} ausgewählt
-        </Typography>
-      ) : (
-        <Typography className={classes.title} variant="h6" id="tableTitle">
-          Besuche
-        </Typography>
-      )}
+    <Toolbar className={classes.root}>
+      <Typography className={classes.title} variant="h6" id="tableTitle">
+        Besuche
+      </Typography>
     </Toolbar>
+  );
+};
+
+const EnhancedTableCell: React.FunctionComponent = ({ children }) => {
+  const classes = useStyles();
+  return (
+    <TableCell
+      className={classes.cell}
+      component="th"
+      scope="row"
+      padding="none"
+    >
+      {children}
+    </TableCell>
   );
 };
 
 const EnhancedTable: React.FunctionComponent<EnhancedTableProps> = ({
   rows,
+  rowsPerPageOptions,
+  count,
+  rowsPerPage,
+  page,
+  onChangePage,
+  onChangeRowsPerPage,
 }) => {
   const classes = useStyles();
-  const [selected, setSelected] = React.useState<Array<string>>([]);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar />
         <TableContainer>
           <Table className={classes.table}>
-            <EnhancedTableHead
-              numSelected={selected.length}
-              onSelectAllClick={event => {
-                if (event.target.checked) {
-                  const newSelecteds = rows.map(n => n.id);
-                  setSelected(newSelecteds);
-                  return;
-                }
-                setSelected([]);
-              }}
-              rowCount={rows.length}
-            />
+            <EnhancedTableHead />
             <TableBody>
-              {rows.map((row, index) => {
-                const isItemSelected = selected.indexOf(row.id) !== -1;
-                const labelId = `enhanced-table-checkbox-${index}`;
+              {rows.map(row => {
                 return (
-                  <TableRow
-                    hover
-                    onClick={() => {
-                      const selectedIndex = selected.indexOf(row.id);
-                      let newSelected: Array<string> = [];
-
-                      if (selectedIndex === -1) {
-                        newSelected = newSelected.concat(selected, row.id);
-                      } else if (selectedIndex === 0) {
-                        newSelected = newSelected.concat(selected.slice(1));
-                      } else if (selectedIndex === selected.length - 1) {
-                        newSelected = newSelected.concat(selected.slice(0, -1));
-                      } else if (selectedIndex > 0) {
-                        newSelected = newSelected.concat(
-                          selected.slice(0, selectedIndex),
-                          selected.slice(selectedIndex + 1)
-                        );
-                      }
-
-                      setSelected(newSelected);
-                    }}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isItemSelected}
-                        inputProps={{ 'aria-labelledby': labelId }}
-                      />
-                    </TableCell>
-                    {Object.keys(row).map((k, index) => {
-                      if (index === 0)
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                    {cellKeys.map((k, index) => {
+                      if (k === 'rooms')
                         return (
-                          <TableCell
-                            id={labelId}
-                            key={k}
-                            component="th"
-                            scope="row"
-                            padding="none"
-                          >
+                          <EnhancedTableCell key={index}>
+                            {// @ts-ignore
+                            row[k].concat(', ')}
+                          </EnhancedTableCell>
+                        );
+                      else if (k === 'action')
+                        return (
+                          <EnhancedTableCell key={index}>
+                            <Button variant="outlined" color="secondary">
+                              Abmelden
+                            </Button>
+                          </EnhancedTableCell>
+                        );
+                      else
+                        return (
+                          <EnhancedTableCell key={index}>
                             {
                               // @ts-ignore
                               row[k]
                             }
-                          </TableCell>
+                          </EnhancedTableCell>
                         );
-                      return (
-                        <TableCell
-                          key={k}
-                          component="th"
-                          scope="row"
-                          padding="none"
-                        >
-                          {
-                            // @ts-ignore
-                            row[k]
-                          }
-                        </TableCell>
-                      );
                     })}
                   </TableRow>
                 );
@@ -203,18 +148,17 @@ const EnhancedTable: React.FunctionComponent<EnhancedTableProps> = ({
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[25, 50, 100]}
-          component="div"
-          count={rows.length}
+          rowsPerPageOptions={rowsPerPageOptions}
+          labelRowsPerPage="Besuche pro Seite"
+          count={count}
           rowsPerPage={rowsPerPage}
           page={page}
-          onChangePage={(_, newPage) => {
-            setPage(newPage);
-          }}
-          onChangeRowsPerPage={event => {
-            setRowsPerPage(parseInt(event.target.value, 10));
-            setPage(0);
-          }}
+          component="div"
+          onChangePage={onChangePage}
+          onChangeRowsPerPage={onChangeRowsPerPage}
+          labelDisplayedRows={({ from, to, count }) =>
+            `${from}-${to} von ${count}`
+          }
         />
       </Paper>
     </div>

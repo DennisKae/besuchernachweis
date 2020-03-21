@@ -2,7 +2,6 @@ import * as React from 'react';
 import Link from 'next/link';
 import { Drawer, Divider, List, ListItem, Button } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import {
   SidebarProps,
@@ -39,15 +38,11 @@ const Sidebar: React.FunctionComponent<SidebarProps> = ({
 
   const items: Array<SidebarListItemProps> = [
     {
-      title: 'Dashboard',
+      title: 'Besucher abmelden',
       link: { href: '/' },
       icon: <DashboardIcon />,
     },
-    {
-      title: 'Besucherübersicht',
-      link: { href: '/visitor' },
-      icon: <PersonIcon />,
-    },
+
     {
       title: 'Besucher hinzufügen',
       link: { href: '/visitor/create' },

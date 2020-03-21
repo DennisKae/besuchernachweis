@@ -37,15 +37,54 @@ export type EnhancedTableToolbarProps = {
   numSelected: number;
 };
 
-export type VisitorTableRowProps = {
+export type Visits = {
   id: string;
-  startDate: string;
-  endDate: string;
+  startDate: React.ReactNode;
+  endDate: React.ReactNode;
   name: string;
   firstName: string;
   email: string;
+  rooms: Array<string>;
 };
+
+export type VisitorTableRowProps = Visits;
 
 export type EnhancedTableProps = {
   rows: Array<VisitorTableRowProps>;
+  rowsPerPageOptions: Array<number>;
+  count: number;
+  rowsPerPage: number;
+  page: number;
+  onChangePage: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
+    page: number
+  ) => void;
+  onChangeRowsPerPage: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
 };
+
+export type VisitorSearch = {
+  name: string;
+  firstName: string;
+  startDate: string;
+  endDate: string;
+};
+
+export type VisitorTableState = {
+  skip: number;
+  limit: number;
+  count: number;
+  page: number;
+  rows: Array<VisitorTableRowProps>;
+  search: VisitorSearch;
+};
+
+export type VisitorTableAction =
+  | {
+      type: 'setVisitors';
+      payload: { rows: Array<Visits>; count?: number };
+    }
+  | { type: 'changePage'; payload: { page: number; skip: number } }
+  | { type: 'changeRowsPerPage'; payload: { limit: number } }
+  | { type: 'setSearch'; payload: VisitorSearch };

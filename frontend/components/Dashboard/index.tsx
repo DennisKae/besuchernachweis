@@ -1,38 +1,50 @@
 import * as React from 'react';
-import { Grid, Typography, TextField } from '@material-ui/core';
-import moment from 'moment';
+import { Grid, Typography, TextField, Input, Button } from '@material-ui/core';
+import useVisitorSearchReducer from '../../hooks/useVisitorSearchReducer';
 import Table from '../Table';
 import StatsCard from './StatsCard';
 import useStyles from './style';
 
 const Dashboard: React.FunctionComponent = () => {
-  const [startDate, setStartDate] = React.useState(
-    moment().format('YYYY-MM-DD')
-  );
-  const [endDate, setEndDate] = React.useState(moment().format('YYYY-MM-DD'));
+  const reducer = useVisitorSearchReducer();
+  if (!reducer) return null;
 
+  const {
+    state: { skip, limit, count, page, rows, search },
+    dispatch,
+  } = reducer;
   const classes = useStyles();
   return (
     <div className={classes.root}>
       <Grid container spacing={4}>
         <Grid item xs={12} sm={6}>
-          <Typography variant="body1">Dashboard</Typography>
-          <Typography variant="h6">Besucherübersicht</Typography>
+          <Typography variant="body1">Besucher</Typography>
+          <Typography variant="h6">Besucher abmelden</Typography>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Grid container justify="flex-end">
+          <Grid container justify="flex-start">
             <TextField
               style={{ paddingRight: '12px' }}
               label="Startdatum"
-              type="date"
-              defaultValue={startDate}
-              onChange={event => setStartDate(event.target.value)}
+              type="datetime-local"
+              defaultValue={search.startDate}
+              onChange={event =>
+                dispatch({
+                  type: 'setSearch',
+                  payload: { ...search, startDate: event.target.value },
+                })
+              }
             />
             <TextField
               label="Enddatum"
-              type="date"
-              defaultValue={endDate}
-              onChange={event => setEndDate(event.target.value)}
+              type="datetime-local"
+              defaultValue={search.endDate}
+              onChange={event => {
+                dispatch({
+                  type: 'setSearch',
+                  payload: { ...search, endDate: event.target.value },
+                });
+              }}
             />
           </Grid>
         </Grid>
@@ -42,30 +54,61 @@ const Dashboard: React.FunctionComponent = () => {
           <StatsCard title="Anzahl Besucher im Zeitraum" value="200" />
         </Grid>
         <Grid item xs={12} sm={6} lg={3} xl={3}>
-          <StatsCard title="Anzahl Besucher aktuell" value="3" />
+          <StatsCard title="Anzahl angemeldeter Besucher" value="3" />
+        </Grid>
+        <Grid item xs={12} sm={6} lg={3} xl={3} alignItems="center">
+          <Input
+            placeholder="Vorname"
+            style={{
+              width: '100%',
+            }}
+            value={search.firstName}
+            onChange={event =>
+              dispatch({
+                type: 'setSearch',
+                payload: { ...search, firstName: event.target.value },
+              })
+            }
+          />
+          <div style={{ marginTop: '8px' }} />
+          <Input
+            placeholder="Name"
+            style={{
+              width: '100%',
+            }}
+            value={search.name}
+            onChange={event =>
+              dispatch({
+                type: 'setSearch',
+                payload: { ...search, name: event.target.value },
+              })
+            }
+          />
+          <div style={{ marginTop: '8px' }} />
+          <Button variant="contained" color="primary">
+            Suchen
+          </Button>
         </Grid>
       </Grid>
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <Table
-            rows={[
-              {
-                id: '1223',
-                startDate: '20.03.2020',
-                endDate: '20.03.2020',
-                name: 'Gilli',
-                firstName: 'Stephan',
-                email: 'gilli.stephan@gmail.com',
-              },
-              {
-                id: '456',
-                startDate: '20.03.2020',
-                endDate: '20.03.2020',
-                name: 'Gilli',
-                firstName: 'Stephan',
-                email: 'gilli.stephan@gmail.com',
-              },
-            ]}
+            rows={rows}
+            rowsPerPageOptions={[25, 50, 100]}
+            count={count}
+            rowsPerPage={limit}
+            page={page}
+            onChangePage={(_, newPage) => {
+              const newSkip = newPage > page ? skip + limit : skip - limit;
+              dispatch({
+                type: 'changePage',
+                payload: { skip: newSkip, page: newPage },
+              });
+            }}
+            onChangeRowsPerPage={event => {
+              const limit = Number(event.target.value);
+              dispatch({ type: 'changeRowsPerPage', payload: { limit } });
+            }}
           />
         </Grid>
       </Grid>
