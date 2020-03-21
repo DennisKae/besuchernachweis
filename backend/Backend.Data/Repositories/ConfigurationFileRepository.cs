@@ -5,12 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Backend.Core.Services.Interfaces;
+using Backend.Data.Repositories.Interfaces;
 using Microsoft.Extensions.Configuration;
 
-namespace Backend.Core.Services
+namespace Backend.Data.Repositories
 {
-    public class ConfigurationFileService : IConfigurationFileService
+    public class ConfigurationFileRepository : IConfigurationFileRepository
     {
         /// <summary>Liefert die Konfiguration des angegebenen Typs aus einer eigenen JSON-Datei im Anwendungsverzeichnis.</summary>
         public T GetConfigFromJsonFile<T>()
