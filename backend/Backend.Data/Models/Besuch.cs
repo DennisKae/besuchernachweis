@@ -16,7 +16,7 @@ namespace Backend.Data.Models
 
         public DateTime Startzeit { get; set; }
 
-        public DateTime Endzeit { get; set; }
+        public DateTime? Endzeit { get; set; }
 
 
     }

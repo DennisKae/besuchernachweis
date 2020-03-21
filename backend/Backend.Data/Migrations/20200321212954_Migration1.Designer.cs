@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20200321183205_Migration2")]
-    partial class Migration2
+    [Migration("20200321212954_Migration1")]
+    partial class Migration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -58,6 +58,65 @@ namespace Backend.Data.Migrations
                             Sicherheitsfrage = "Wie hieß Ihr erstes Haustier?",
                             SicherheitsfrageAntwort = "Hundi"
                         });
+                });
+
+            modelBuilder.Entity("Backend.Data.Models.Besuch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Endzeit")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Startzeit")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Besuch");
+                });
+
+            modelBuilder.Entity("Backend.Data.Models.BesuchBesucher", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BesuchId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BesucherId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BesuchId");
+
+                    b.HasIndex("BesucherId");
+
+                    b.ToTable("BesuchBesucher");
+                });
+
+            modelBuilder.Entity("Backend.Data.Models.BesuchRaum", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BesuchId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("RaumId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BesuchId");
+
+                    b.HasIndex("RaumId");
+
+                    b.ToTable("BesuchRaum");
                 });
 
             modelBuilder.Entity("Backend.Data.Models.Besucher", b =>
@@ -216,6 +275,36 @@ namespace Backend.Data.Migrations
                     b.HasOne("Backend.Data.Models.Person", "Person")
                         .WithMany()
                         .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Backend.Data.Models.BesuchBesucher", b =>
+                {
+                    b.HasOne("Backend.Data.Models.Besuch", "Besuch")
+                        .WithMany()
+                        .HasForeignKey("BesuchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Data.Models.Besucher", "Besucher")
+                        .WithMany()
+                        .HasForeignKey("BesucherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Backend.Data.Models.BesuchRaum", b =>
+                {
+                    b.HasOne("Backend.Data.Models.Besuch", "Besuch")
+                        .WithMany()
+                        .HasForeignKey("BesuchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Data.Models.Raum", "Raum")
+                        .WithMany()
+                        .HasForeignKey("RaumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -28,13 +28,24 @@ namespace Backend.WebApi.Controllers
         }
 
         /// <summary>Liefert alle Besucher</summary>
-        [Route("")]
-        [HttpGet]
-        public IActionResult GetAll()
+        [Route("[action]")]
+        [HttpPost]
+        public IActionResult ByFilter(BesucherFilterViewModel besucherFilterViewModel)
         {
             return Execute(() =>
             {
-                return BesucherViewModel.GetMock();
+                return _besucherService.GetByFilterViewModel(besucherFilterViewModel);
+            });
+        }
+
+        /// <summary>Liefert die Anzahl der aktiven Besucher</summary>
+        [Route("[action]")]
+        [HttpGet]
+        public IActionResult AktiveBesucher()
+        {
+            return Execute(() =>
+            {
+                return _besucherService.GetAnzahlAktiverBesucher();
             });
         }
 

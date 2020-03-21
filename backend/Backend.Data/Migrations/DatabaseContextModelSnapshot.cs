@@ -64,7 +64,7 @@ namespace Backend.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Endzeit")
+                    b.Property<DateTime?>("Endzeit")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Startzeit")
