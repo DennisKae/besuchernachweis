@@ -24,8 +24,8 @@ namespace Backend.Core.Repositories
         {
             return _databaseContext.BesuchBesucher
                 .Where(x => besuche.Select(y => y.Id).Contains(x.BesuchId) && x.Besucher != null)
+                .Include(x => x.Besucher.Person)
                 .Select(x => x.Besucher)
-                //.Include(x => x.Person)
                 .ToList();
         }
 
@@ -33,8 +33,8 @@ namespace Backend.Core.Repositories
         {
             return _databaseContext.BesuchBesucher
                 .Where(x => x.BesuchId == besuch.Id && x.Besucher != null)
+                .Include(x => x.Besucher.Person)
                 .Select(x => x.Besucher)
-                //.Include(x => x.Person)
                 .ToList();
         }
     }
