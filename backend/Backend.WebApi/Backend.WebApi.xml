@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Backend.WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:Backend.WebApi.Controllers.BesuchController.GetAll">
+            <summary>Liefert alle Besuche</summary>
+        </member>
+        <member name="M:Backend.WebApi.Controllers.BesuchController.Create(Backend.Core.ViewModels.NeuerBesuchViewModel)">
+            <summary>Speichert einen neuen Besuch</summary>
+        </member>
+        <member name="M:Backend.WebApi.Controllers.BesucherController.GetAll">
+            <summary>Liefert alle Besucher</summary>
+        </member>
+        <member name="M:Backend.WebApi.Controllers.GebaeudeController.GetAll">
+            <summary>Liefert alle Gebäude</summary>
+        </member>
+        <member name="M:Backend.WebApi.Controllers.GebaeudeController.Create(Backend.Core.ViewModels.GebaeudeViewModel)">
+            <summary>Liefert alle Gebäude</summary>
+        </member>
+        <member name="M:Backend.WebApi.Controllers.PersonController.GetAll">
+            <summary>Liefert alle Personen</summary>
+        </member>
+        <member name="M:Backend.WebApi.DependencyInjector.InjectDependencies(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>Injiziert alle benötigten Dependencies</summary>
+        </member>
+        <member name="M:Backend.WebApi.Startup.EnsureMigration">
+            <summary>Führt die Migrationen der Datenbank aus.</summary>
+        </member>
+    </members>
+</doc>

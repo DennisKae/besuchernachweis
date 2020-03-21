@@ -1,14 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using Backend.Data;
+using Backend.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 namespace Backend.WebApi
 {
@@ -25,15 +31,36 @@ namespace Backend.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+
+            // Swagger
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Besuchernachweis " + Assembly.GetExecutingAssembly().GetName().Name + " API",
+                    Version = "v1"
+                });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
+
+            EnsureMigration();
+
+            services.InjectDependencies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            loggerFactory.AddLog4Net();
 
             app.UseRouting();
 
@@ -43,6 +70,24 @@ namespace Backend.WebApi
             {
                 endpoints.MapControllers();
             });
+
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", Assembly.GetExecutingAssembly().GetName().Name + " API V1");
+            });
+        }
+
+        /// <summary>Führt die Migrationen der Datenbank aus.</summary>
+        private void EnsureMigration()
+        {
+            //var configurationFileRepository = new ConfigurationFileRepository();
+            //using (var databaseContext = new DatabaseContext(configurationFileRepository))
+            //{
+            //    databaseContext.Database.Migrate();
+            //}
         }
     }
 }
