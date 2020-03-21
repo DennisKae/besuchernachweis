@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Backend.Core.Repositories;
 using Backend.Core.ViewModels;
 using Backend.Data.Models;
 
@@ -32,6 +33,9 @@ namespace Backend.Core
                 .ReverseMap();
 
             CreateMap<RaumViewModel, Raum>()
+                .ReverseMap();
+
+            CreateMap<Besuch, BesuchViewModel>()
                 .ReverseMap();
         }
     }

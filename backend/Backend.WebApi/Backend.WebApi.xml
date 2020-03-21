@@ -4,26 +4,38 @@
         <name>Backend.WebApi</name>
     </assembly>
     <members>
-        <member name="M:Backend.WebApi.Controllers.BesuchController.GetAll">
-            <summary>Liefert alle Besuche</summary>
-        </member>
         <member name="M:Backend.WebApi.Controllers.BesuchController.Create(Backend.Core.ViewModels.NeuerBesuchViewModel)">
-            <summary>Speichert einen neuen Besuch</summary>
+            <summary>Speichert einen neuen Besuch und gibt ihn zurück.</summary>
+        </member>
+        <member name="M:Backend.WebApi.Controllers.BesuchController.SetEndzeitpunkt(Backend.Core.ViewModels.BesuchEndzeitViewModel)">
+            <summary>Setzt den Endzeitpunkt eines Besuchs</summary>
         </member>
         <member name="M:Backend.WebApi.Controllers.BesuchController.GetByFilter(Backend.Core.ViewModels.BesuchFilterViewModel)">
-            <summary>Liefert alle Besuche</summary>
+            <summary>Liefert alle Besuche, die dem Filter entsprechen</summary>
+        </member>
+        <member name="M:Backend.WebApi.Controllers.BesuchController.ByBesucher(System.Int32)">
+            <summary>Liefert alle Besuche eines Besuchers</summary>
         </member>
         <member name="M:Backend.WebApi.Controllers.BesucherController.GetAll">
             <summary>Liefert alle Besucher</summary>
         </member>
-        <member name="M:Backend.WebApi.Controllers.BesucherController.Add(Backend.Core.ViewModels.BesucherViewModel)">
+        <member name="M:Backend.WebApi.Controllers.BesucherController.Create(Backend.Core.ViewModels.BesucherViewModel)">
             <summary>Erstellt einen neuen Besucher.</summary>
         </member>
         <member name="M:Backend.WebApi.Controllers.GebaeudeController.GetAll">
-            <summary>Liefert alle Gebäude</summary>
+            <summary>Liefert alle Gebäude mit allen Räumen.</summary>
         </member>
         <member name="M:Backend.WebApi.Controllers.GebaeudeController.Create(Backend.Core.ViewModels.GebaeudeViewModel)">
-            <summary>Liefert alle Gebäude</summary>
+            <summary>Erstellt ein neues Gebäude (mit Räumen)</summary>
+        </member>
+        <member name="M:Backend.WebApi.Controllers.GebaeudeController.DeleteGebaeude(System.Int32)">
+            <summary>Löscht ein Gebäude</summary>
+        </member>
+        <member name="M:Backend.WebApi.Controllers.GebaeudeController.Create(Backend.Core.ViewModels.RaumViewModel)">
+            <summary>Erstellt einen neuen Raum</summary>
+        </member>
+        <member name="M:Backend.WebApi.Controllers.GebaeudeController.DeleteRaum(System.Int32)">
+            <summary>Löscht einen Raum</summary>
         </member>
         <member name="M:Backend.WebApi.Controllers.PersonController.GetAll">
             <summary>Liefert alle Personen</summary>

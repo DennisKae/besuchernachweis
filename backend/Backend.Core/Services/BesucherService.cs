@@ -16,13 +16,13 @@ namespace Backend.Core.Services
         }
 
 
-        public BesucherViewModel AddBesucher(BesucherViewModel besucherViewModel)
+        public BesucherViewModel Create(BesucherViewModel besucherViewModel)
         {
             using (var unit = new UnitOfWork())
             {
                 var besucherRepo = unit.GetRepository<BesucherRepository>();
                 var dbBesucher = _mapper.Map<Besucher>(besucherViewModel);
-                besucherRepo.AddBesucher(dbBesucher);
+                besucherRepo.Create(dbBesucher);
 
                 unit.SaveChanges();
                 return _mapper.Map<BesucherViewModel>(dbBesucher);

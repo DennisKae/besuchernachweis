@@ -11,9 +11,15 @@ namespace Backend.Data
         public DbSet<Person> Person { get; set; }
         public DbSet<Benutzer> Benutzer { get; set; }
         public DbSet<Besucher> Besucher { get; set; }
+
         public DbSet<Konfiguration> Konfiguration { get; set; }
+
         public DbSet<Gebaeude> Gebaeude { get; set; }
         public DbSet<Raum> Raum { get; set; }
+
+        public DbSet<Besuch> Besuch { get; set; }
+        public DbSet<BesuchBesucher> BesuchBesucher { get; set; }
+        public DbSet<BesuchRaum> BesuchRaum { get; set; }
 
 
         public DatabaseContext(string datenbankPfad)

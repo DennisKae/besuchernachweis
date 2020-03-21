@@ -4,6 +4,6 @@ namespace Backend.Core.Services
 {
     public interface IBesucherService
     {
-        BesucherViewModel AddBesucher(BesucherViewModel besucherViewModel);
+        BesucherViewModel Create(BesucherViewModel besucherViewModel);
     }
 }

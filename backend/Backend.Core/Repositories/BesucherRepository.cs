@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Backend.Data;
 using Backend.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Core.Repositories
 {
@@ -14,9 +15,27 @@ namespace Backend.Core.Repositories
         {
         }
 
-        public void AddBesucher(Besucher besucher)
+        public void Create(Besucher besucher)
         {
             _databaseContext.Add(besucher);
+        }
+
+        public List<Besucher> GetBesucherByBesuch(List<Besuch> besuche)
+        {
+            return _databaseContext.BesuchBesucher
+                .Where(x => besuche.Select(y => y.Id).Contains(x.BesuchId) && x.Besucher != null)
+                .Select(x => x.Besucher)
+                //.Include(x => x.Person)
+                .ToList();
+        }
+
+        public List<Besucher> GetBesucherByBesuch(Besuch besuch)
+        {
+            return _databaseContext.BesuchBesucher
+                .Where(x => x.BesuchId == besuch.Id && x.Besucher != null)
+                .Select(x => x.Besucher)
+                //.Include(x => x.Person)
+                .ToList();
         }
     }
 }

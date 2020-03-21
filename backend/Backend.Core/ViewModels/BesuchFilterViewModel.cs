@@ -11,5 +11,9 @@ namespace Backend.Core.ViewModels
         public DateTime DatumVon { get; set; }
 
         public DateTime DatumBis { get; set; }
+
+        public string Name { get; set; }
+
+        public string Vorname { get; set; }
     }
 }

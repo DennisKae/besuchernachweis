@@ -42,11 +42,11 @@ namespace Backend.WebApi.Controllers
         [Route("")]
         [HttpPost]
         [ProducesResponseType(typeof(BesucherViewModel), StatusCodes.Status200OK)]
-        public IActionResult Add(BesucherViewModel besucherViewModel)
+        public IActionResult Create(BesucherViewModel besucherViewModel)
         {
             return Execute(() =>
             {
-                return _besucherService.AddBesucher(besucherViewModel);
+                return _besucherService.Create(besucherViewModel);
             });
         }
     }

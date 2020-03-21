@@ -16,48 +16,61 @@ namespace Backend.WebApi.Controllers
     [Route("api/[controller]")]
     public class BesuchController : BaseController<BesuchController>
     {
+        private readonly IBesuchService _besuchService;
+
         public BesuchController(
-            ILogger<BesuchController> logger) : base(logger)
+            ILogger<BesuchController> logger,
+            IBesuchService besuchService) : base(logger)
         {
+            _besuchService = besuchService;
         }
 
-        /// <summary>Liefert alle Besuche</summary>
-        [Route("")]
-        [HttpGet]
-        [ProducesResponseType(typeof(List<BesuchViewModel>), StatusCodes.Status200OK)]
-        public IActionResult GetAll()
-        {
-            return Execute(() =>
-            {
-                return new List<BesuchViewModel>() { BesuchViewModel.GetMock() };
-            });
-        }
-
-        /// <summary>Speichert einen neuen Besuch</summary>
+        /// <summary>Speichert einen neuen Besuch und gibt ihn zurück.</summary>
         [Route("")]
         [HttpPost]
         public IActionResult Create(NeuerBesuchViewModel neuerBesuchViewModel)
         {
-            return Execute<string>(() =>
+            return Execute(() =>
             {
                 // Startzeit serverseitig setzen
+                return _besuchService.Create(neuerBesuchViewModel);
+            });
+        }
+
+        /// <summary>Setzt den Endzeitpunkt eines Besuchs</summary>
+        [Route("[action]")]
+        [HttpPut]
+        public IActionResult SetEndzeitpunkt(BesuchEndzeitViewModel besuchEndzeitViewModel)
+        {
+            return Execute<string>(() =>
+            {
+                _besuchService.SetEndzeitpunkt(besuchEndzeitViewModel);
                 return null;
             });
         }
 
-        /// <summary>Liefert alle Besuche</summary>
+        /// <summary>Liefert alle Besuche, die dem Filter entsprechen</summary>
         [Route("[action]")]
-        [HttpGet]
+        [HttpPost]
         [ProducesResponseType(typeof(List<BesuchViewModel>), StatusCodes.Status200OK)]
         public IActionResult GetByFilter(BesuchFilterViewModel besuchFilterViewModel)
         {
             return Execute(() =>
             {
-                return new List<BesuchViewModel>() { BesuchViewModel.GetMock() };
+                return _besuchService.GetByFilterViewModel(besuchFilterViewModel);
             });
         }
 
-
-        // Endpunkt zum Besuch beenden
+        /// <summary>Liefert alle Besuche eines Besuchers</summary>
+        [Route("[action]/{id:int}")]
+        [HttpGet]
+        [ProducesResponseType(typeof(List<BesuchViewModel>), StatusCodes.Status200OK)]
+        public IActionResult ByBesucher(int id)
+        {
+            return Execute(() =>
+            {
+                return _besuchService.GetBesucheOfBesucher(id);
+            });
+        }
     }
 }
