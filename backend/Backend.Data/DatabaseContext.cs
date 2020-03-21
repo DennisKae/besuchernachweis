@@ -12,6 +12,8 @@ namespace Backend.Data
         public DbSet<Benutzer> Benutzer { get; set; }
         public DbSet<Besucher> Besucher { get; set; }
         public DbSet<Konfiguration> Konfiguration { get; set; }
+        public DbSet<Gebaeude> Gebaeude { get; set; }
+        public DbSet<Raum> Raum { get; set; }
 
 
         public DatabaseContext(string datenbankPfad)
@@ -80,6 +82,42 @@ namespace Backend.Data
                         Id = 1,
                         PersonId = 2,
                         Gesundheitsstatus = "gesund"
+                    }
+                });
+            });
+
+            modelBuilder.Entity<Raum>(entity =>
+            {
+                entity.HasData(new Raum[]
+                {
+                    new Raum
+                    {
+                        Id = 1,
+                        Bezeichnung = "Raum 1.1",
+                        GebaeudeId = 1
+                    },
+                    new Raum
+                    {
+                        Id = 2,
+                        Bezeichnung = "Raum 2.2",
+                        GebaeudeId = 2
+                    }
+                });
+            });
+
+            modelBuilder.Entity<Gebaeude>(entity =>
+            {
+                entity.HasData(new Gebaeude[]
+                {
+                    new Gebaeude
+                    {
+                        Id = 1,
+                        Bezeichnung = "Gebäude 1"
+                    },
+                    new Gebaeude
+                    {
+                        Id = 2,
+                        Bezeichnung = "Gebäude 2"
                     }
                 });
             });

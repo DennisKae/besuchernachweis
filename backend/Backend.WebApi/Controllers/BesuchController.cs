@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Backend.Core.Services;
 using Backend.Core.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,7 +16,8 @@ namespace Backend.WebApi.Controllers
     [Route("api/[controller]")]
     public class BesuchController : BaseController<BesuchController>
     {
-        public BesuchController(ILogger<BesuchController> logger) : base(logger)
+        public BesuchController(
+            ILogger<BesuchController> logger) : base(logger)
         {
         }
 
