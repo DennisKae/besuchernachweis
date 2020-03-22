@@ -136,7 +136,7 @@ export type ModalProps = {
 export type EditModalContentProps = {
   id: string;
   title: string;
-  onSaveClick: (props: { title: string; id: string }) => void;
+  onSaveClick: (props: any) => void;
   onExitClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 

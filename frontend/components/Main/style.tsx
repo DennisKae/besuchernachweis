@@ -15,6 +15,7 @@ export default makeStyles((theme: Theme) =>
     },
     content: {
       height: '100%',
+      position: 'relative',
     },
   })
 );

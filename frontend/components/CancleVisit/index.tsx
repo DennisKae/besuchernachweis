@@ -28,12 +28,8 @@ const Dashboard: React.FunctionComponent = () => {
     <div className={classes.root}>
       <Grid container spacing={4}>
         <Grid item xs={12} sm={6}>
-          <Typography variant="body1" translation-id="administraton">
-            {t('administration')}
-          </Typography>
-          <Typography variant="h6" translation-id="visitor-cancle">
-            {t('visitor-cancle')}
-          </Typography>
+          <Typography variant="body1">{t('administration')}</Typography>
+          <Typography variant="h6">{t('visitor-cancle')}</Typography>
         </Grid>
         <Grid item xs={12} sm={6}></Grid>
       </Grid>

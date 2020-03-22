@@ -76,6 +76,7 @@ const EnhancedTable: React.FunctionComponent<EnhancedTableProps> = ({
   if (rows.length === 0) return null;
   const classes = useStyles();
   const cells = Object.keys(rows[0]);
+  if (!displayOnly) cells.push('');
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -91,28 +92,25 @@ const EnhancedTable: React.FunctionComponent<EnhancedTableProps> = ({
                     {keys.map((k, index) => {
                       // @ts-ignore
                       const value = formatValue(row[k]);
-                      if (keys.length + 1 === index && !displayOnly) {
-                        return (
-                          <EnhancedTableCell key={index}>
-                            <Button
-                              variant="outlined"
-                              color="secondary"
-                              onClick={() => {
-                                if (row['ID']) onClickRow(row['ID']);
-                              }}
-                            >
-                              {buttonLabel}
-                            </Button>
-                          </EnhancedTableCell>
-                        );
-                      }
-
                       return (
                         <EnhancedTableCell key={index}>
                           {value}
                         </EnhancedTableCell>
                       );
                     })}
+                    {!displayOnly && (
+                      <EnhancedTableCell key={index}>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          onClick={() => {
+                            if (row['ID']) onClickRow(row['ID']);
+                          }}
+                        >
+                          {buttonLabel}
+                        </Button>
+                      </EnhancedTableCell>
+                    )}
                   </TableRow>
                 );
               })}

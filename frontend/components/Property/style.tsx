@@ -11,7 +11,9 @@ export default makeStyles((theme: Theme) =>
     },
     paper: {
       padding: theme.spacing(5),
+      position: 'relative',
     },
+
     panelDetails: {
       paddingLeft: theme.spacing(2),
       [theme.breakpoints.up('sm')]: {
@@ -26,6 +28,7 @@ export default makeStyles((theme: Theme) =>
     },
     input: {
       width: '100%',
+      minWidth: '250px',
     },
     extendedIcon: {
       marginRight: theme.spacing(1),

@@ -1,5 +1,6 @@
 import * as React from 'react';
+import Register from '../../../components/RegisterVisit';
 
-const Visitors: React.FunctionComponent = () => <div>Besucher Anlegen</div>;
+const Visitors: React.FunctionComponent = () => <Register />;
 
 export default Visitors;

@@ -24,22 +24,21 @@ import Modal from '../Modal';
 import Dialog from '../Dialog';
 import useStyles from './style';
 
-const EditModalContent: React.FunctionComponent<EditModalContentProps> = ({
+const ModalContent: React.FunctionComponent<EditModalContentProps> = ({
   id,
   title,
   onSaveClick,
   onExitClick,
 }) => {
   const classes = useStyles();
+  const { t } = useTranslations();
   const [value, setValue] = React.useState<string>(title);
   return (
     <Paper className={classes.paper}>
-      <Typography variant="body1">
-        Bitte geben Sie eine Bezeichnung ein
-      </Typography>
+      <Typography variant="body1">{t('add-description')}</Typography>
 
       <Input
-        placeholder="Bezeichnung"
+        placeholder={t('description')}
         className={classes.input}
         value={value}
         onChange={event => setValue(event.target.value)}
@@ -53,10 +52,10 @@ const EditModalContent: React.FunctionComponent<EditModalContentProps> = ({
           disabled={value === title}
           onClick={() => onSaveClick({ title: value, id })}
         >
-          Speichern
+          {t('save')}
         </Button>
         <Button variant="contained" color="secondary" onClick={onExitClick}>
-          Abbrechen
+          {t('cancle')}
         </Button>
       </Grid>
     </Paper>
@@ -65,7 +64,17 @@ const EditModalContent: React.FunctionComponent<EditModalContentProps> = ({
 
 const Property: React.FunctionComponent<{
   properties: Array<PropertyProps>;
-}> = ({ properties }) => {
+  onDelete: (props: { id: string }) => void;
+  onEdit: (props: { id: string; title: string }) => void;
+  onCreate: (props: { title: string }) => void;
+}> = ({ properties, onDelete, onEdit, onCreate }) => {
+  const [showCreateModal, setShowCreateModal] = React.useState<{
+    status: boolean;
+    type: 'building' | 'room' | null;
+  }>({
+    status: false,
+    type: null,
+  });
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
   const [showDeleteDialog, setShowDeleteDialog] = React.useState<boolean>(
     false
@@ -81,29 +90,56 @@ const Property: React.FunctionComponent<{
   const minMd = useMediaQuery(theme.breakpoints.up('md'));
   return (
     <>
-      <Dialog
-        open={showDeleteDialog}
-        onClose={() => setShowDeleteDialog(false)}
-        title="Gebäude 1"
-        content={t('are-you-sure-to-delete')}
-        onAgree={() => {}}
-        onDisagree={() => setShowDeleteDialog(false)}
-      />
+      {activeElement && (
+        <Dialog
+          open={showDeleteDialog}
+          onClose={() => setShowDeleteDialog(false)}
+          title={activeElement.title}
+          content={t('are-you-sure-to-delete')}
+          onAgree={() => onDelete({ id: activeElement.id })}
+          onDisagree={() => setShowDeleteDialog(false)}
+        />
+      )}
       <Modal open={showEditModal} onClose={() => setShowEditModal(false)}>
         {activeElement && (
-          <EditModalContent
+          <ModalContent
             id={activeElement.id}
             title={activeElement.title}
-            onSaveClick={() => {}}
+            onSaveClick={props => onEdit(props)}
             onExitClick={() => setShowEditModal(false)}
           />
         )}
+      </Modal>
+      <Modal
+        open={showCreateModal.status}
+        onClose={() =>
+          setShowCreateModal({
+            status: false,
+            type: null,
+          })
+        }
+      >
+        <ModalContent
+          id=""
+          title=""
+          onSaveClick={props => {
+            onCreate({ title: props.title });
+          }}
+          onExitClick={() =>
+            setShowCreateModal({
+              status: false,
+              type: null,
+            })
+          }
+        />
       </Modal>
       <div className={classes.root}>
         <Grid container spacing={4}>
           <Grid item xs={9} sm={6}>
             <Typography variant="body1">{t('administration')}</Typography>
-            <Typography variant="h6">Gebäude & Räume</Typography>
+            <Typography variant="h6">
+              {t('property-properties-rooms')}
+            </Typography>
           </Grid>
           <Grid
             item
@@ -114,9 +150,18 @@ const Property: React.FunctionComponent<{
               justifyContent: 'flex-end',
             }}
           >
-            <Fab variant="extended" color="secondary">
+            <Fab
+              variant="extended"
+              color="secondary"
+              onClick={() =>
+                setShowCreateModal({
+                  status: true,
+                  type: 'building',
+                })
+              }
+            >
               <AddIcon />
-              {minMd && 'Gebäude'}
+              {minMd && t('property-properties')}
             </Fab>
           </Grid>
         </Grid>
@@ -169,9 +214,18 @@ const Property: React.FunctionComponent<{
                 </ExpansionPanelDetails>
                 <Divider />
                 <ExpansionPanelActions>
-                  <Fab variant="extended" color="secondary">
+                  <Fab
+                    variant="extended"
+                    color="secondary"
+                    onClick={() =>
+                      setShowCreateModal({
+                        status: true,
+                        type: 'room',
+                      })
+                    }
+                  >
                     <AddIcon />
-                    {minMd && 'Zimmer'}
+                    {minMd && t('property-rooms')}
                   </Fab>
                 </ExpansionPanelActions>
               </ExpansionPanel>
