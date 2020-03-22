@@ -8,9 +8,9 @@ namespace Backend.Core.ViewModels
 {
     public class BesuchFilterViewModel
     {
-        public DateTime DatumVon { get; set; }
+        public DateTime? DatumVon { get; set; }
 
-        public DateTime DatumBis { get; set; }
+        public DateTime? DatumBis { get; set; }
 
         public string Name { get; set; }
 

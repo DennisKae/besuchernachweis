@@ -14,8 +14,20 @@ namespace Backend.Core.Repositories
         {
         }
 
-        public List<Besuch> GetByZeitraum(DateTime startzeit, DateTime endzeit) =>
-            _databaseContext.Besuch.Where(x => x.Startzeit >= startzeit && x.Endzeit <= endzeit).ToList();
+        public List<Besuch> GetByZeitraum(DateTime? startzeit, DateTime? endzeit)
+        {
+            var query = _databaseContext.Besuch.AsQueryable();
+            if (startzeit.HasValue)
+            {
+                query = query.Where(x => x.Startzeit >= startzeit.Value);
+            }
+            if (endzeit.HasValue)
+            {
+                query = query.Where(x => x.Endzeit <= endzeit.Value);
+            }
+
+            return query.ToList();
+        }
 
         public Besuch GetById(int id) => _databaseContext.Besuch.FirstOrDefault(x => x.Id == id);
 
