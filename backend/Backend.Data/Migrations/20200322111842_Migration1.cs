@@ -95,6 +95,8 @@ namespace Backend.Data.Migrations
                     Passwort = table.Column<string>(nullable: true),
                     Sicherheitsfrage = table.Column<string>(nullable: true),
                     SicherheitsfrageAntwort = table.Column<string>(nullable: true),
+                    IstGesperrt = table.Column<bool>(nullable: false),
+                    LoginVersuche = table.Column<int>(nullable: false),
                     HasExtendedRights = table.Column<bool>(nullable: false),
                     LetzterLogin = table.Column<DateTime>(nullable: false)
                 },
@@ -208,13 +210,13 @@ namespace Backend.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Benutzer",
-                columns: new[] { "Id", "HasExtendedRights", "LetzterLogin", "Passwort", "PersonId", "Sicherheitsfrage", "SicherheitsfrageAntwort" },
-                values: new object[] { 1, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AYgdFleLHESvoYA29zlEZrdl4z5Be36ibZWa+ozs4r6lPBkxhIEReGvXWEsIunduCQ==", 1, "Wie hieß Ihr erstes Haustier?", "Hundi" });
+                columns: new[] { "Id", "HasExtendedRights", "IstGesperrt", "LetzterLogin", "LoginVersuche", "Passwort", "PersonId", "Sicherheitsfrage", "SicherheitsfrageAntwort" },
+                values: new object[] { 1, false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, "AYgdFleLHESvoYA29zlEZrdl4z5Be36ibZWa+ozs4r6lPBkxhIEReGvXWEsIunduCQ==", 1, "Wie hieß Ihr erstes Haustier?", "Hundi" });
 
             migrationBuilder.InsertData(
                 table: "Benutzer",
-                columns: new[] { "Id", "HasExtendedRights", "LetzterLogin", "Passwort", "PersonId", "Sicherheitsfrage", "SicherheitsfrageAntwort" },
-                values: new object[] { 2, true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AYgdFleLHESvoYA29zlEZrdl4z5Be36ibZWa+ozs4r6lPBkxhIEReGvXWEsIunduCQ==", 2, "Wie hieß Ihr erstes Haustier?", "Hundi" });
+                columns: new[] { "Id", "HasExtendedRights", "IstGesperrt", "LetzterLogin", "LoginVersuche", "Passwort", "PersonId", "Sicherheitsfrage", "SicherheitsfrageAntwort" },
+                values: new object[] { 2, true, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, "AYgdFleLHESvoYA29zlEZrdl4z5Be36ibZWa+ozs4r6lPBkxhIEReGvXWEsIunduCQ==", 2, "Wie hieß Ihr erstes Haustier?", "Hundi" });
 
             migrationBuilder.InsertData(
                 table: "Besucher",
@@ -260,6 +262,11 @@ namespace Backend.Data.Migrations
                 name: "IX_BesuchRaum_RaumId",
                 table: "BesuchRaum",
                 column: "RaumId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Person_Email",
+                table: "Person",
+                column: "Email");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Raum_GebaeudeId",

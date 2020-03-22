@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20200322074056_Migration1")]
+    [Migration("20200322111842_Migration1")]
     partial class Migration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,8 +27,14 @@ namespace Backend.Data.Migrations
                     b.Property<bool>("HasExtendedRights")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("IstGesperrt")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("LetzterLogin")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("LoginVersuche")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Passwort")
                         .HasColumnType("TEXT");
@@ -53,7 +59,9 @@ namespace Backend.Data.Migrations
                         {
                             Id = 1,
                             HasExtendedRights = false,
+                            IstGesperrt = false,
                             LetzterLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LoginVersuche = 0,
                             Passwort = "AYgdFleLHESvoYA29zlEZrdl4z5Be36ibZWa+ozs4r6lPBkxhIEReGvXWEsIunduCQ==",
                             PersonId = 1,
                             Sicherheitsfrage = "Wie hieß Ihr erstes Haustier?",
@@ -63,7 +71,9 @@ namespace Backend.Data.Migrations
                         {
                             Id = 2,
                             HasExtendedRights = true,
+                            IstGesperrt = false,
                             LetzterLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LoginVersuche = 0,
                             Passwort = "AYgdFleLHESvoYA29zlEZrdl4z5Be36ibZWa+ozs4r6lPBkxhIEReGvXWEsIunduCQ==",
                             PersonId = 2,
                             Sicherheitsfrage = "Wie hieß Ihr erstes Haustier?",
@@ -224,6 +234,8 @@ namespace Backend.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email");
 
                     b.ToTable("Person");
 
