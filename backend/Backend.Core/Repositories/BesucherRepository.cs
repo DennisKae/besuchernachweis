@@ -61,6 +61,11 @@ namespace Backend.Core.Repositories
                 query = query.Where(x => x.Person != null && x.Person.Name.ToLower().Contains(besucherFilterViewModel.Name.ToLower()));
             }
 
+            if (!string.IsNullOrWhiteSpace(besucherFilterViewModel.Email))
+            {
+                query = query.Where(x => x.Person != null && x.Person.Email.ToLower().Contains(besucherFilterViewModel.Email.ToLower()));
+            }
+
             if (besucherFilterViewModel.Startzeit.HasValue && !besucherFilterViewModel.Endzeit.HasValue)
             {
                 var start = besucherFilterViewModel.Startzeit.Value;

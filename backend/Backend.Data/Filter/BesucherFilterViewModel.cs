@@ -12,6 +12,8 @@ namespace Backend.Core.ViewModels
 
         public string Vorname { get; set; }
 
+        public string Email { get; set; }
+
         public int? Skip { get; set; }
 
         public int? Take { get; set; }
