@@ -38,6 +38,8 @@ namespace Backend.WebApi
         {
             services.AddControllers();
 
+            LogEnvironmentVariables();
+
             var key = Encoding.UTF8.GetBytes(EnvironmentVariableValues.AppSecret);
             services.AddAuthentication(x =>
             {
@@ -70,7 +72,6 @@ namespace Backend.WebApi
                 c.IncludeXmlComments(xmlPath);
             });
 
-            LogEnvironmentVariables();
             EnsureMigration();
 
             //services.InjectDependencies();
@@ -133,9 +134,10 @@ namespace Backend.WebApi
 
         private void LogEnvironmentVariables()
         {
-            Console.WriteLine("Ausgelesene Environmentvariable: " + nameof(EnvironmentVariableValues.Datenbankpfad) + ": " + EnvironmentVariableValues.Datenbankpfad);
-            Console.WriteLine("Ausgelesene Environmentvariable: " + nameof(EnvironmentVariableValues.Loginversuche) + ": " + EnvironmentVariableValues.Loginversuche);
-            Console.WriteLine("Ausgelesene Environmentvariable: " + nameof(EnvironmentVariableValues.TokenLifetime) + ": " + EnvironmentVariableValues.TokenLifetime);
+            Console.WriteLine("Ausgelesene Environmentvariable: " + EnvironmentVariableValues.DatenbankPfadKey + ": " + EnvironmentVariableValues.Datenbankpfad);
+            Console.WriteLine("Ausgelesene Environmentvariable: " + EnvironmentVariableValues.LoginversucheKey + ": " + EnvironmentVariableValues.Loginversuche);
+            Console.WriteLine("Ausgelesene Environmentvariable: " + EnvironmentVariableValues.TokenLifeTimeKey + ": " + EnvironmentVariableValues.TokenLifetime);
+            Console.WriteLine("Ausgelesene Environmentvariable: " + EnvironmentVariableValues.AppSecretKey + ": " + EnvironmentVariableValues.AppSecret);
         }
     }
 }

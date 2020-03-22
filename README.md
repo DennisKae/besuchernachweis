@@ -2,10 +2,10 @@
 
 [https://devpost.com/software/besuchernachweis-mit-webanwendung](https://devpost.com/software/besuchernachweis-mit-webanwendung)
 
-
 ## Was ist die Herausforderung / das Problem? Was ist das Bedürfnis dahinter?
 
 ### Kurzfassung
+
 * Besucher einer Institution (z.B. Krankenhaus) erfassen (mit Ein- und Ausgang).
 * Momentane Besucherdichte in Räumlichkeiten überwachen - Zugangsgewährung.
 * Hilfe bei Nachvollziehung von Infektionsketten

@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+  backend:
+    container_name: backend
+    image: denniska/backendwebapi
+    environment:
+        DATENBANKPFAD: /app/data/Besuchernachweis.db
+        TOKENLIFETIME: 12
+        APPSECRET: AppSecret123
+        LOGINVERSUCHE: 5
+    ports:
+        - 8080:80
+    restart: unless-stopped
+    volumes:
+        - ./database:/app/data/
