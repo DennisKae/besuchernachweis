@@ -1,4 +1,7 @@
 # Besuchernachweis mit Webanwendung
+
+Diese Anwendung wurde im Rahmen des [#WirVsVirus Hackathons](https://wirvsvirushackathon.org/) entwickelt.
+
 - Demo: [https://besuchernachweis-tool.now.sh/](https://besuchernachweis-tool.now.sh/)
 
 - Devpost Beitrag: [https://devpost.com/software/besuchernachweis-mit-webanwendung](https://devpost.com/software/besuchernachweis-mit-webanwendung)
