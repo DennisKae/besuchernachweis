@@ -7,6 +7,7 @@ using AutoMapper;
 using Backend.Core.Repositories;
 using Backend.Core.Services.Interfaces;
 using Backend.Core.ViewModels;
+using Backend.Data;
 using Backend.Data.Models;
 
 namespace Backend.Core.Services
@@ -21,22 +22,45 @@ namespace Backend.Core.Services
             _mapper = mapper;
         }
 
-        public BesuchViewModel Create(NeuerBesuchViewModel neuerBesuchViewModel)
+        public BesuchViewModel Create(NeuerBesuchViewModel neuerBesuch)
         {
+            Guard.IsNotNull(neuerBesuch, nameof(neuerBesuch));
+            Guard.IsNotNull(neuerBesuch.Besucher, nameof(neuerBesuch.Besucher));
+            Guard.IsNotNull(neuerBesuch.Raeume, nameof(neuerBesuch.Raeume));
+
             using (var unit = new UnitOfWork())
             {
+                var besucherRepo = unit.GetRepository<BesucherRepository>();
+                neuerBesuch.Besucher.ForEach(x =>
+                {
+                    if (besucherRepo.GetBesucherById(x) == null)
+                    {
+                        throw new CustomException("Der Besucher wurde nicht gefunden: " + x);
+                    }
+                });
+
+                var gebaeudeRepo = unit.GetRepository<GebaeudeRepository>();
+                neuerBesuch.Raeume.ForEach(x =>
+                {
+                    if (gebaeudeRepo.GetRaumById(x) == null)
+                    {
+                        throw new CustomException("Der Raum wurde nicht gefunden: " + x);
+                    }
+                });
+
+
                 var besuchRepo = unit.GetRepository<BesuchRepository>();
                 var newBesuch = new Besuch { Startzeit = DateTime.Now };
                 besuchRepo.Create(newBesuch);
                 unit.SaveChanges();
 
-                var besuchBesucher = neuerBesuchViewModel.Besucher?.Select(x => new BesuchBesucher { BesuchId = newBesuch.Id, BesucherId = x })?.ToList();
+                var besuchBesucher = neuerBesuch.Besucher?.Select(x => new BesuchBesucher { BesuchId = newBesuch.Id, BesucherId = x })?.ToList();
                 if (besuchBesucher?.Count > 0)
                 {
                     besuchRepo.Create(besuchBesucher);
                 }
 
-                var besuchRaeume = neuerBesuchViewModel.Raeume?.Select(x => new BesuchRaum { BesuchId = newBesuch.Id, RaumId = x })?.ToList();
+                var besuchRaeume = neuerBesuch.Raeume?.Select(x => new BesuchRaum { BesuchId = newBesuch.Id, RaumId = x })?.ToList();
                 if (besuchRaeume?.Count > 0)
                 {
                     besuchRepo.Create(besuchRaeume);

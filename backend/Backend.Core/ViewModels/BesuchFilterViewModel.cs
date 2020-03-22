@@ -15,5 +15,9 @@ namespace Backend.Core.ViewModels
         public string Name { get; set; }
 
         public string Vorname { get; set; }
+
+        /// <summary>IDs der Räume</summary>
+        public List<int> Raeume { get; set; }
+        // TODO: Räume aufnehmen
     }
 }

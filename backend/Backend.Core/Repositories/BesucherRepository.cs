@@ -21,6 +21,8 @@ namespace Backend.Core.Repositories
             _databaseContext.Add(besucher);
         }
 
+        public Besucher GetBesucherById(int id) => _databaseContext.Besucher.FirstOrDefault(x => x.Id == id);
+
         public List<Besucher> GetBesucherByBesuch(List<Besuch> besuche)
         {
             return _databaseContext.BesuchBesucher

@@ -12,7 +12,7 @@ namespace Backend.Data
         {
             if (target == null)
             {
-                throw new ArgumentNullException(nameOrDescription);
+                throw new CheckInputException(nameOrDescription);
             }
         }
     }
