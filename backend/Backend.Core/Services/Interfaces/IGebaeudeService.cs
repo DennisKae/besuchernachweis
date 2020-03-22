@@ -10,5 +10,7 @@ namespace Backend.Core.Services
         void DeleteGebaeude(int gebaeudeId);
         void DeleteRaum(int raumId);
         List<GebaeudeViewModel> GetAll();
+        GebaeudeViewModel Update(GebaeudeViewModel gebaeudeViewModel);
+        RaumViewModel Update(RaumViewModel raumViewModel);
     }
 }

@@ -10,7 +10,7 @@ services:
         APPSECRET: AppSecret123
         LOGINVERSUCHE: 5
     ports:
-        - 8080:80
+        - 80:80
     restart: unless-stopped
     volumes:
         - ./database:/app/data/

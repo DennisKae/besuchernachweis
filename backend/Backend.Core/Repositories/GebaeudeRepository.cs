@@ -23,9 +23,34 @@ namespace Backend.Core.Repositories
                 .ToList();
         }
 
+        public Gebaeude GetGebaeudeById(int id)
+        {
+            return _databaseContext
+                .Gebaeude
+                .Include(x => x.Raeume)
+                .FirstOrDefault(x => x.Id == id);
+        }
+
+        public Raum GetRaumById(int id)
+        {
+            return _databaseContext
+                .Raum
+                .FirstOrDefault(x => x.Id == id);
+        }
+
         public void Create(Gebaeude gebaeude)
         {
             _databaseContext.Add(gebaeude);
+        }
+
+        public void Update(Gebaeude gebaeude)
+        {
+            _databaseContext.Update(gebaeude);
+        }
+
+        public void Update(Raum raum)
+        {
+            _databaseContext.Update(raum);
         }
 
         public void DeleteGebaeude(int id)

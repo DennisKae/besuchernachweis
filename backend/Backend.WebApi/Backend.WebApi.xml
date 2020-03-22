@@ -28,14 +28,20 @@
         <member name="M:Backend.WebApi.Controllers.GebaeudeController.GetAll">
             <summary>Liefert alle Gebäude mit allen Räumen.</summary>
         </member>
-        <member name="M:Backend.WebApi.Controllers.GebaeudeController.Create(Backend.Core.ViewModels.GebaeudeViewModel)">
+        <member name="M:Backend.WebApi.Controllers.GebaeudeController.CreateGebaeude(Backend.Core.ViewModels.GebaeudeViewModel)">
             <summary>Erstellt ein neues Gebäude (mit Räumen)</summary>
+        </member>
+        <member name="M:Backend.WebApi.Controllers.GebaeudeController.UpdateGebaeude(Backend.Core.ViewModels.GebaeudeViewModel)">
+            <summary>Aktualisiert ein Gebäude</summary>
         </member>
         <member name="M:Backend.WebApi.Controllers.GebaeudeController.DeleteGebaeude(System.Int32)">
             <summary>Löscht ein Gebäude</summary>
         </member>
-        <member name="M:Backend.WebApi.Controllers.GebaeudeController.Create(Backend.Core.ViewModels.RaumViewModel)">
+        <member name="M:Backend.WebApi.Controllers.GebaeudeController.CreateRaum(Backend.Core.ViewModels.RaumViewModel)">
             <summary>Erstellt einen neuen Raum</summary>
+        </member>
+        <member name="M:Backend.WebApi.Controllers.GebaeudeController.UpdateRaum(Backend.Core.ViewModels.RaumViewModel)">
+            <summary>Aktualisiert einen Raum</summary>
         </member>
         <member name="M:Backend.WebApi.Controllers.GebaeudeController.DeleteRaum(System.Int32)">
             <summary>Löscht einen Raum</summary>

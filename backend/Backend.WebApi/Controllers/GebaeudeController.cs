@@ -40,11 +40,23 @@ namespace Backend.WebApi.Controllers
         [Route("")]
         [HttpPost]
         [ProducesResponseType(typeof(GebaeudeViewModel), StatusCodes.Status200OK)]
-        public IActionResult Create(GebaeudeViewModel gebaeudeViewModel)
+        public IActionResult CreateGebaeude(GebaeudeViewModel gebaeudeViewModel)
         {
             return Execute(() =>
             {
                 return _gebaeudeService.Create(gebaeudeViewModel);
+            });
+        }
+
+        /// <summary>Aktualisiert ein Gebäude</summary>
+        [Route("")]
+        [HttpPut]
+        [ProducesResponseType(typeof(GebaeudeViewModel), StatusCodes.Status200OK)]
+        public IActionResult UpdateGebaeude(GebaeudeViewModel gebaeudeViewModel)
+        {
+            return Execute(() =>
+            {
+                return _gebaeudeService.Update(gebaeudeViewModel);
             });
         }
 
@@ -63,12 +75,24 @@ namespace Backend.WebApi.Controllers
         /// <summary>Erstellt einen neuen Raum</summary>
         [Route("Raum")]
         [HttpPost]
-        [ProducesResponseType(typeof(GebaeudeViewModel), StatusCodes.Status200OK)]
-        public IActionResult Create(RaumViewModel raumViewModel)
+        [ProducesResponseType(typeof(RaumViewModel), StatusCodes.Status200OK)]
+        public IActionResult CreateRaum(RaumViewModel raumViewModel)
         {
             return Execute(() =>
             {
                 return _gebaeudeService.Create(raumViewModel);
+            });
+        }
+
+        /// <summary>Aktualisiert einen Raum</summary>
+        [Route("Raum")]
+        [HttpPut]
+        [ProducesResponseType(typeof(RaumViewModel), StatusCodes.Status200OK)]
+        public IActionResult UpdateRaum(RaumViewModel raumViewModel)
+        {
+            return Execute(() =>
+            {
+                return _gebaeudeService.Update(raumViewModel);
             });
         }
 
