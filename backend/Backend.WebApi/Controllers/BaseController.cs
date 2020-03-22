@@ -44,7 +44,7 @@ namespace Backend.WebApi.Controllers
             {
                 try
                 {
-                    _logger.LogCritical(exception, JsonSerializer.Serialize(exception, new JsonSerializerOptions { WriteIndented = true });
+                    _logger.LogCritical(exception, JsonSerializer.Serialize(exception, new JsonSerializerOptions { WriteIndented = true }));
                 }
                 catch
                 {
