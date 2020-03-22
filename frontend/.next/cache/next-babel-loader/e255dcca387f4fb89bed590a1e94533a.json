@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { makeStyles, createStyles } from '@material-ui/core/styles';\nexport default makeStyles(theme => createStyles({\n  root: {\n    padding: theme.spacing(4)\n  },\n  contentContainer: {\n    padding: theme.spacing(3)\n  },\n  input: {\n    width: '100%'\n  }\n}));","map":null,"metadata":{},"sourceType":"module"}

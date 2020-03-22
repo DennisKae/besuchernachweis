@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { makeStyles, createStyles } from '@material-ui/core/styles';\nexport default makeStyles(function (theme) {\n  return createStyles({\n    root: {\n      boxShadow: 'none'\n    },\n    flexGrow: {\n      flexGrow: 1\n    },\n    signOutButton: {\n      marginLeft: theme.spacing(1)\n    }\n  });\n});","map":null,"metadata":{},"sourceType":"module"}

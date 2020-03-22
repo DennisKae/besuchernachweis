@@ -115,7 +115,7 @@ export type PropertyProps = {
 export type VisitorTableAction =
   | {
       type: 'setVisitors';
-      payload: { rows: Array<Visits>; count?: number };
+      payload: { rows: Array<any>; count?: number };
     }
   | { type: 'changePage'; payload: { page: number; skip: number } }
   | { type: 'changeRowsPerPage'; payload: { limit: number } }

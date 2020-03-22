@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { createStyles, makeStyles } from '@material-ui/core/styles';\nexport default makeStyles(function (theme) {\n  return createStyles({\n    root: {\n      padding: theme.spacing(4)\n    }\n  });\n});","map":null,"metadata":{},"sourceType":"module"}

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import fetch from 'isomorphic-unfetch';
 import {
   Grid,
   Typography,
@@ -22,6 +23,36 @@ const Dashboard: React.FunctionComponent = () => {
     state: { skip, limit, count, page, rows, search },
     dispatch,
   } = reducer;
+
+  React.useEffect(() => {
+    async function getVisitors() {
+      try {
+        const res = await fetch(
+          'http://ec2-3-127-244-90.eu-central-1.compute.amazonaws.com/api/Besuch/GetByFilter',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              vorname: 'Max',
+              name: 'Mustermann',
+              datumVon: search.startDate,
+              datumBis: search.endDate,
+            }),
+          }
+        );
+        if (res.ok) {
+          const data = await res.json();
+          console.log(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getVisitors();
+  }, []);
+
   const classes = useStyles();
   const { t } = useTranslations();
   return (
@@ -38,7 +69,10 @@ const Dashboard: React.FunctionComponent = () => {
           <StatsCard title={t('visitor-count-for-period')} value="200" />
         </Grid>
         <Grid item xs={12} sm={6} lg={3} xl={3}>
-          <StatsCard title={t('visitor-count-current-registered')} value="3" />
+          <StatsCard
+            title={t('visitor-count-current-registered')}
+            value={`${rows.length}`}
+          />
         </Grid>
         <Grid item xs={12} sm={6} lg={3} xl={3} alignItems="center">
           <Card>

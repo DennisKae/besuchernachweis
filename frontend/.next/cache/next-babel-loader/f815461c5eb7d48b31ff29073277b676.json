@@ -1,0 +1,1 @@
+{"ast":null,"code":"import Router from 'next/router';\nexport default function redirectTo(destination, status, res, as) {\n  if (res) {\n    res.writeHead(status || 302, {\n      Location: destination\n    });\n    res.end();\n  } else {\n    Router.push(destination, as);\n  }\n}","map":null,"metadata":{},"sourceType":"module"}

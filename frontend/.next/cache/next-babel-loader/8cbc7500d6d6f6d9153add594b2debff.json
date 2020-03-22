@@ -1,0 +1,1 @@
+{"ast":null,"code":"var __jsx = React.createElement;\nimport * as React from 'react';\nimport CancleVisit from '../../../components/CancleVisit';\n\nvar Visitors = function Visitors() {\n  return __jsx(CancleVisit, null);\n};\n\nexport default Visitors;","map":null,"metadata":{},"sourceType":"module"}

@@ -57,7 +57,7 @@ const EnhancedTableCell: React.FunctionComponent = ({ children }) => {
 };
 
 function formatValue(val: string | number | Array<any>) {
-  if (Array.isArray(val)) return val.concat(', ');
+  if (Array.isArray(val)) return val.join(', ');
   return val;
 }
 
@@ -85,35 +85,37 @@ const EnhancedTable: React.FunctionComponent<EnhancedTableProps> = ({
           <Table className={classes.table}>
             <EnhancedTableHead cells={cells} />
             <TableBody>
-              {rows.map((row, index) => {
-                const keys = Object.keys(row);
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                    {keys.map((k, index) => {
-                      // @ts-ignore
-                      const value = formatValue(row[k]);
-                      return (
+              {rows
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const keys = Object.keys(row);
+                  return (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                      {keys.map((k, index) => {
+                        // @ts-ignore
+                        const value = formatValue(row[k]);
+                        return (
+                          <EnhancedTableCell key={index}>
+                            {value}
+                          </EnhancedTableCell>
+                        );
+                      })}
+                      {!displayOnly && (
                         <EnhancedTableCell key={index}>
-                          {value}
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            onClick={() => {
+                              if (row['ID']) onClickRow(row['ID']);
+                            }}
+                          >
+                            {buttonLabel}
+                          </Button>
                         </EnhancedTableCell>
-                      );
-                    })}
-                    {!displayOnly && (
-                      <EnhancedTableCell key={index}>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          onClick={() => {
-                            if (row['ID']) onClickRow(row['ID']);
-                          }}
-                        >
-                          {buttonLabel}
-                        </Button>
-                      </EnhancedTableCell>
-                    )}
-                  </TableRow>
-                );
-              })}
+                      )}
+                    </TableRow>
+                  );
+                })}
             </TableBody>
           </Table>
         </TableContainer>

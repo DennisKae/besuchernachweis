@@ -4,7 +4,9 @@
 	"dependencies": {
 		"@material-ui/core": "latest",
 		"@material-ui/icons": "^4.9.1",
+		"@types/faker": "^4.1.10",
 		"clsx": "latest",
+		"faker": "^4.1.0",
 		"moment": "^2.24.0",
 		"next": "latest",
 		"react": "latest",

@@ -38,12 +38,10 @@ const DEFAULT_STATE: VisitorTableState = {
   search: {
     name: '',
     firstName: '',
-    startDate: moment(new Date().setHours(0, 0, 0, 0)).format(
-      'YYYY-MM-DDTHH:mm'
-    ),
+    startDate: moment(new Date().setHours(0, 0, 0, 0)).toISOString(),
     endDate: moment(new Date().setHours(24, 0, 0, 0))
       .subtract(1, 'minute')
-      .format('YYYY-MM-DDTHH:mm'),
+      .toISOString(),
   },
 };
 

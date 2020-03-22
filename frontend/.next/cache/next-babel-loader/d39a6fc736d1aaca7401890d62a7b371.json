@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { createStyles, makeStyles } from '@material-ui/core/styles';\nexport default makeStyles(() => createStyles({\n  root: {\n    height: '100%'\n  },\n  content: {\n    alignItems: 'center',\n    display: 'flex'\n  },\n  title: {\n    fontWeight: 400\n  }\n}));","map":null,"metadata":{},"sourceType":"module"}

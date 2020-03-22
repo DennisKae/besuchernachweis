@@ -1,0 +1,1 @@
+self.__BUILD_MANIFEST = (function(a){return {"/[locale]/visitor/cancle":[a],"/[locale]/visitor/register":[a]}}("static\u002Fchunks\u002Fcdf23ccda57094d45765c186d3580575ae61a875.e5bb8be9d29106cd6cfc.js"));self.__BUILD_MANIFEST_CB && self.__BUILD_MANIFEST_CB()
