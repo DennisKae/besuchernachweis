@@ -62,7 +62,7 @@ namespace Backend.WebApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Besuchernachweis " + Assembly.GetExecutingAssembly().GetName().Name + " API",
+                    Title = "Besuchernachweis - " + Assembly.GetExecutingAssembly().GetName().Name + " API",
                     Version = "v1"
                 });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -70,6 +70,7 @@ namespace Backend.WebApi
                 c.IncludeXmlComments(xmlPath);
             });
 
+            LogEnvironmentVariables();
             EnsureMigration();
 
             //services.InjectDependencies();
@@ -128,6 +129,13 @@ namespace Backend.WebApi
             {
                 databaseContext.Database.Migrate();
             }
+        }
+
+        private void LogEnvironmentVariables()
+        {
+            Console.WriteLine("Ausgelesene Environmentvariable: " + nameof(EnvironmentVariableValues.Datenbankpfad) + ": " + EnvironmentVariableValues.Datenbankpfad);
+            Console.WriteLine("Ausgelesene Environmentvariable: " + nameof(EnvironmentVariableValues.Loginversuche) + ": " + EnvironmentVariableValues.Loginversuche);
+            Console.WriteLine("Ausgelesene Environmentvariable: " + nameof(EnvironmentVariableValues.TokenLifetime) + ": " + EnvironmentVariableValues.TokenLifetime);
         }
     }
 }
