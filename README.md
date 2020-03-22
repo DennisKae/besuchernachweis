@@ -1,5 +1,7 @@
 # Besuchernachweis mit Webanwendung
 
+[![#WirVsVirus Hackathon Logo](./docs/Logo_Projekt_01.png "#WirVsVirus Hackathon")](https://wirvsvirushackathon.org/)
+
 Diese Anwendung wurde im Rahmen des [#WirVsVirus Hackathons](https://wirvsvirushackathon.org/) entwickelt.
 
 - Demo: [https://besuchernachweis-tool.now.sh/](https://besuchernachweis-tool.now.sh/)
