@@ -22,6 +22,9 @@ namespace Backend.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("HasExtendedRights")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("LetzterLogin")
                         .HasColumnType("TEXT");
 
@@ -30,9 +33,6 @@ namespace Backend.Data.Migrations
 
                     b.Property<int>("PersonId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Rolle")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Sicherheitsfrage")
                         .HasColumnType("TEXT");
@@ -50,9 +50,20 @@ namespace Backend.Data.Migrations
                         new
                         {
                             Id = 1,
+                            HasExtendedRights = false,
                             LetzterLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Passwort = "AYgdFleLHESvoYA29zlEZrdl4z5Be36ibZWa+ozs4r6lPBkxhIEReGvXWEsIunduCQ==",
                             PersonId = 1,
-                            Rolle = "Pförtner",
+                            Sicherheitsfrage = "Wie hieß Ihr erstes Haustier?",
+                            SicherheitsfrageAntwort = "Hundi"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            HasExtendedRights = true,
+                            LetzterLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Passwort = "AYgdFleLHESvoYA29zlEZrdl4z5Be36ibZWa+ozs4r6lPBkxhIEReGvXWEsIunduCQ==",
+                            PersonId = 2,
                             Sicherheitsfrage = "Wie hieß Ihr erstes Haustier?",
                             SicherheitsfrageAntwort = "Hundi"
                         });
@@ -140,7 +151,7 @@ namespace Backend.Data.Migrations
                         {
                             Id = 1,
                             Gesundheitsstatus = "gesund",
-                            PersonId = 2
+                            PersonId = 3
                         });
                 });
 
@@ -232,6 +243,15 @@ namespace Backend.Data.Migrations
                             SysStampIn = new DateTime(2020, 3, 21, 12, 1, 0, 0, DateTimeKind.Unspecified),
                             Telefon = "0561 123 4568",
                             Vorname = "Martina"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "erika.mustermann@test.de",
+                            Name = "Mustermann",
+                            SysStampIn = new DateTime(2020, 3, 21, 12, 1, 0, 0, DateTimeKind.Unspecified),
+                            Telefon = "0561 123 4569",
+                            Vorname = "Erika"
                         });
                 });
 

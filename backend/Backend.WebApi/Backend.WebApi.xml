@@ -16,7 +16,7 @@
         <member name="M:Backend.WebApi.Controllers.BesuchController.ByBesucher(System.Int32)">
             <summary>Liefert alle Besuche eines Besuchers</summary>
         </member>
-        <member name="M:Backend.WebApi.Controllers.BesucherController.GetAll">
+        <member name="M:Backend.WebApi.Controllers.BesucherController.ByFilter(Backend.Core.ViewModels.BesucherFilterViewModel)">
             <summary>Liefert alle Besucher</summary>
         </member>
         <member name="M:Backend.WebApi.Controllers.BesucherController.AktiveBesucher">

@@ -24,7 +24,11 @@ namespace Backend.Data.Models
 
         public string SicherheitsfrageAntwort { get; set; }
 
-        public string Rolle { get; set; }
+        public bool IstGesperrt { get; set; }
+
+        public int LoginVersuche { get; set; }
+
+        public bool HasExtendedRights { get; set; }
 
         public DateTime LetzterLogin { get; set; }
 

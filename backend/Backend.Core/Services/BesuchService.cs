@@ -13,14 +13,11 @@ namespace Backend.Core.Services
 {
     public class BesuchService : IBesuchService
     {
-        private readonly IPersonService _personService;
         private readonly IMapper _mapper;
 
         public BesuchService(
-            IPersonService personService,
             IMapper mapper)
         {
-            _personService = personService;
             _mapper = mapper;
         }
 
@@ -56,7 +53,7 @@ namespace Backend.Core.Services
             using (var unit = new UnitOfWork())
             {
                 var besuchRepo = unit.GetRepository<BesuchRepository>();
-
+                // TODO: Kann das noch optimiert werden?
                 List<Besuch> besuche = besuchRepo.GetByZeitraum(filterViewModel.DatumVon, filterViewModel.DatumBis);
                 if (besuche == null || besuche.Count == 0)
                 {

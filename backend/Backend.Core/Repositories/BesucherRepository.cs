@@ -80,7 +80,8 @@ namespace Backend.Core.Repositories
                 var ende = besucherFilterViewModel.Endzeit.Value;
                 List<int> relevanteBesucheBesucherIds = _databaseContext.BesuchBesucher
                     .Where(x => x.Besuch != null && x.Besuch.Startzeit <= ende && (x.Besuch.Endzeit == null || x.Besuch.Endzeit <= ende))
-                    .Select(x => x.BesucherId).ToList();
+                    .Select(x => x.BesucherId)
+                    .ToList();
 
                 if (relevanteBesucheBesucherIds?.Count > 0)
                 {
@@ -97,7 +98,8 @@ namespace Backend.Core.Repositories
                 var ende = besucherFilterViewModel.Endzeit.Value;
                 List<int> relevanteBesucheBesucherIds = _databaseContext.BesuchBesucher
                     .Where(x => x.Besuch != null && x.Besuch.Startzeit >= start && (x.Besuch.Endzeit == null || x.Besuch.Endzeit <= ende))
-                    .Select(x => x.BesucherId).ToList();
+                    .Select(x => x.BesucherId)
+                    .ToList();
 
                 if (relevanteBesucheBesucherIds?.Count > 0)
                 {
