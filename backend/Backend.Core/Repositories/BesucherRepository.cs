@@ -53,12 +53,12 @@ namespace Backend.Core.Repositories
 
             if (!string.IsNullOrWhiteSpace(besucherFilterViewModel.Vorname))
             {
-                query = query.Where(x => x.Person != null && x.Person.Vorname.Contains(besucherFilterViewModel.Vorname));
+                query = query.Where(x => x.Person != null && x.Person.Vorname.ToLower().Contains(besucherFilterViewModel.Vorname.ToLower()));
             }
 
             if (!string.IsNullOrWhiteSpace(besucherFilterViewModel.Name))
             {
-                query = query.Where(x => x.Person != null && x.Person.Name.Contains(besucherFilterViewModel.Name));
+                query = query.Where(x => x.Person != null && x.Person.Name.ToLower().Contains(besucherFilterViewModel.Name.ToLower()));
             }
 
             if (besucherFilterViewModel.Startzeit.HasValue && !besucherFilterViewModel.Endzeit.HasValue)
@@ -113,10 +113,17 @@ namespace Backend.Core.Repositories
                 }
             }
 
-            return query
-                .Skip(besucherFilterViewModel.Skip)
-                .Take(besucherFilterViewModel.Take)
-                .ToList();
+            if (besucherFilterViewModel.Skip.HasValue)
+            {
+                query = query.Skip(besucherFilterViewModel.Skip.Value);
+            }
+
+            if (besucherFilterViewModel.Take.HasValue)
+            {
+                query = query.Take(besucherFilterViewModel.Take.Value);
+            }
+
+            return query.ToList();
         }
     }
 }
