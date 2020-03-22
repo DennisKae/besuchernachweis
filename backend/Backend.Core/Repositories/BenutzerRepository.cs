@@ -18,6 +18,11 @@ namespace Backend.Core.Repositories
             _databaseContext = databaseContext;
         }
 
+        public void CreateBenutzer(Benutzer benutzer)
+        {
+            _databaseContext.Add(benutzer);
+        }
+
         public Benutzer GetByEmail(string email)
         {
             return _databaseContext.Benutzer

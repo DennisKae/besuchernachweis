@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Backend.Core.ViewModels;
 
-namespace Backend.Core.Services
+namespace Backend.Core.Services.Interfaces
 {
     public interface IGebaeudeService
     {

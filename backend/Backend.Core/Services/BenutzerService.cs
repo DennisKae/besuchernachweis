@@ -39,35 +39,18 @@ namespace Backend.Core.Services
             }
         }
 
-        public LoginResultViewModel Login(LoginViewModel loginViewModel)
+        public Benutzer CreateBenutzer(Benutzer benutzer)
         {
-            var user = GetByEmail(loginViewModel?.Email);
-            var errorMessage = "Benutzername oder Passwort falsch.";
-            if (user == null)
+            Guard.IsNotNull(benutzer, nameof(benutzer));
+            benutzer.LetzterLogin = DateTime.Now;
+            using (var unit = new UnitOfWork())
             {
-                throw new CustomException(errorMessage);
+                var benutzerRepo = unit.GetRepository<BenutzerRepository>();
+                benutzerRepo.CreateBenutzer(benutzer);
+
+                unit.SaveChanges();
+                return benutzer;
             }
-
-            PasswordVerificationResult verificationResult = _passwordHashingService.VerifyHashedPassword(user.Passwort, loginViewModel.Passwort);
-
-            if (verificationResult == PasswordVerificationResult.Failed)
-            {
-                using (var unit = new UnitOfWork())
-                {
-                    var benutzerRepo = unit.GetRepository<BenutzerRepository>();
-                    user.LoginVersuche += 1;
-                    benutzerRepo.Update(user);
-                }
-
-                throw new CustomException(errorMessage);
-            }
-
-
-            _logger.LogInformation($"Erfolgreicher Loginversuch des Benutzers {loginViewModel?.Email}.");
-
-            SetLastLoginResetLoginversuche(user);
-
-            return _mapper.Map<LoginResultViewModel>(user);
         }
 
         public BenutzerViewModel Update(ExtendedBenutzerViewModel benutzer)
@@ -96,18 +79,5 @@ namespace Backend.Core.Services
             }
         }
 
-
-        private void SetLastLoginResetLoginversuche(Benutzer benutzer)
-        {
-            benutzer.LetzterLogin = DateTime.Now;
-            benutzer.LoginVersuche = 0;
-
-            using (var unit = new UnitOfWork())
-            {
-                var benutzerRepo = unit.GetRepository<BenutzerRepository>();
-                benutzerRepo.Update(benutzer);
-                unit.SaveChanges();
-            }
-        }
     }
 }

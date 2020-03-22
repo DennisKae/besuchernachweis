@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using Backend.Core.Repositories;
+using Backend.Core.Services.Interfaces;
 using Backend.Core.ViewModels;
 using Backend.Data.Models;
 

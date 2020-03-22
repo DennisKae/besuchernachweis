@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace Backend.Core.Services
+namespace Backend.Core.Services.Interfaces
 {
     public interface IPasswordHashingService
     {
