@@ -12,17 +12,11 @@ namespace Backend.Core.Services
     public class BenutzerService : IBenutzerService
     {
         private readonly IMapper _mapper;
-        private readonly ILogger<BenutzerService> _logger;
-        private readonly IPasswordHashingService _passwordHashingService;
 
         public BenutzerService(
-            IMapper mapper,
-            ILogger<BenutzerService> logger,
-            IPasswordHashingService passwordHashingService)
+            IMapper mapper)
         {
             _mapper = mapper;
-            _logger = logger;
-            _passwordHashingService = passwordHashingService;
         }
 
         public Benutzer GetByEmail(string email)

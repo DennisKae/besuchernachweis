@@ -81,25 +81,6 @@ namespace Backend.Core.Services
                 var besuchRepo = unit.GetRepository<BesuchRepository>();
                 var result = besuchRepo.GetByFilter(filterViewModel);
                 return GetBesuchViewModelsFromBesuche(unit, result);
-                // TODO: Kann das noch optimiert werden?
-                //List<Besuch> besuche = besuchRepo.GetByZeitraum(filterViewModel.DatumVon, filterViewModel.DatumBis);
-                //if (besuche == null || besuche.Count == 0)
-                //{
-                //    return null;
-                //}
-
-                //var result = GetBesuchViewModelsFromBesuche(unit, besuche);
-                //if (!string.IsNullOrWhiteSpace(filterViewModel?.Name))
-                //{
-                //    result.ForEach(x => x.Besucher = x.Besucher?.Where(y => y.Person?.Name.Contains(filterViewModel.Name) == true).ToList());
-                //}
-
-                //if (!string.IsNullOrWhiteSpace(filterViewModel?.Vorname))
-                //{
-                //    result.ForEach(x => x.Besucher = x.Besucher?.Where(y => y.Person?.Name.Contains(filterViewModel.Vorname) == true).ToList());
-                //}
-
-                //return result;
             }
         }
 
