@@ -23,7 +23,7 @@ namespace Backend.Core.Repositories
             }
             if (endzeit.HasValue)
             {
-                query = query.Where(x => x.Endzeit <= endzeit.Value);
+                query = query.Where(x => x.Endzeit == null || x.Endzeit <= endzeit.Value);
             }
 
             return query.ToList();

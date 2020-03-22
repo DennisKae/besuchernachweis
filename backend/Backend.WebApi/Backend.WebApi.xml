@@ -40,9 +40,6 @@
         <member name="M:Backend.WebApi.Controllers.GebaeudeController.DeleteRaum(System.Int32)">
             <summary>Löscht einen Raum</summary>
         </member>
-        <member name="M:Backend.WebApi.Controllers.PersonController.GetAll">
-            <summary>Liefert alle Personen</summary>
-        </member>
         <member name="M:Backend.WebApi.DependencyInjector.InjectDependencies(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>Injiziert alle benötigten Dependencies</summary>
         </member>

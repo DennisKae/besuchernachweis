@@ -12,7 +12,7 @@ namespace Backend.Core.ViewModels
 
         public DateTime Startzeit { get; set; }
 
-        public DateTime Endzeit { get; set; }
+        public DateTime? Endzeit { get; set; }
 
         public List<BesucherViewModel> Besucher { get; set; }
 
