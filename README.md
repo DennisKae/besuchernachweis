@@ -1,6 +1,9 @@
 # Besuchernachweis mit Webanwendung
+- Demo: [https://besuchernachweis-tool.now.sh/](https://besuchernachweis-tool.now.sh/)
 
-[https://devpost.com/software/besuchernachweis-mit-webanwendung](https://devpost.com/software/besuchernachweis-mit-webanwendung)
+- Devpost Beitrag: [https://devpost.com/software/besuchernachweis-mit-webanwendung](https://devpost.com/software/besuchernachweis-mit-webanwendung)
+
+- YouTube Pitchvideo: [https://www.youtube.com/watch?v=Ym6lCrW7vmY](https://www.youtube.com/watch?v=Ym6lCrW7vmY)
 
 ## Was ist die Herausforderung / das Problem? Was ist das Bedürfnis dahinter?
 
@@ -63,6 +66,35 @@ sollen die Besucher:innen beim Eingang darüber aufgeklärt werden, dass sie sic
 einem Listbildausweis identifizieren müssen und sich mit dessen Vorlage damit einverstanden erklären,
 dass ihre Daten zu den Zwecken, die in diesem Projekt beschrieben sind, für einen bestimmten (noch zu definierenden) Zeitraum gespeichert werden.
 
-## Was ist der Themenbereich?
+## Features
 
-008_corona_tracking
+### Umgesetzte Features
+
+- Erfassung von Besuchern
+- Erfassung von Besuchen (An- und Abmeldung)
+- Erfassung von Gebäuden und Räumen
+- Analyse der Besuche (Wer war wann in welchem Raum?)
+- Mehrsprachenfähigkeit (aktuell deutsch, englisch, französisch, schwedisch)
+
+### Geplante Features
+
+- Feststellung der Zugangsberechtigung
+    - Anhand von definierbaren Regeln wird bei Erfassung des Besuchs geprüft, ob der Besuch möglich ist.
+- Dashboard
+    - Darstellung diverser Anzahlen (z.B. Anzahl aktiver Besucher im Gebäude).
+- Analyse der Frequentierung der Benutzer
+- Abonnierbare Benachrichtigungen
+    - z.B. bei Über-/Unterschreitung von definierten Grenzwerten
+- Datenexport
+- Fähigkeit mehrere Institutionen zentral zu hosten
+- Scan (Auslesen) von Ausweisdokumenten
+
+## Ausblick
+
+Zur Beurteilung der Verwendbarkeit der Anwendung müssen noch verschiedene Expertenmeinungen eingeholt werden. Insbesondere müssen noch datenschutzrelevante Vorkehrungen in der Anwendung getroffen werden. Weiterhin sollten auch Meinungen von potentiellen Anwendern eingeholt werden, um die Anwendung in Bezug auf ihre Usability zu überprüfen und um Prozessabläufe abzustimmen.
+
+Außerdem stehen noch die Fragen des Betriebs im Raum: Wie könnte die Anwendung betrieben, bzw, gehostet werden? Aktuell läuft die Anwendung in Docker-Containern und ist lediglich für eine Institution ausgelegt. Interessant wäre sicherlich ein zentraler Betrieb mit einer zentralen Datenbank, mit der institutionsübergreifende Auswertungen möglich sein könnten.
+
+## Was war die Challenge?
+
+008 Corona Tracking: Wie können Corona-infizierte/ getestete/ genesene Personen getrackt werden?
