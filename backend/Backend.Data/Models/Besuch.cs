@@ -18,6 +18,6 @@ namespace Backend.Data.Models
 
         public DateTime? Endzeit { get; set; }
 
-
+        public List<BesuchRaum> BesuchRaeume { get; set; }
     }
 }

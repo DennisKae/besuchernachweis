@@ -12,12 +12,13 @@ namespace Backend.Core.ViewModels
 
         public DateTime? DatumBis { get; set; }
 
-        public string Name { get; set; }
-
-        public string Vorname { get; set; }
+        public int? BesucherId { get; set; }
 
         /// <summary>IDs der Räume</summary>
         public List<int> Raeume { get; set; }
-        // TODO: Räume aufnehmen
+
+        public int? Skip { get; set; }
+
+        public int? Take { get; set; }
     }
 }
