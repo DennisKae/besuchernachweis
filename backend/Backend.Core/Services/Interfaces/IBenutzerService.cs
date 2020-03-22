@@ -7,5 +7,6 @@ namespace Backend.Core.Services.Interfaces
     {
         Benutzer GetByEmail(string email);
         LoginResultViewModel Login(LoginViewModel loginViewModel);
+        BenutzerViewModel Update(ExtendedBenutzerViewModel benutzer);
     }
 }

@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20200321183205_Migration2")]
-    partial class Migration2
+    [Migration("20200322111842_Migration1")]
+    partial class Migration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,17 +24,23 @@ namespace Backend.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("HasExtendedRights")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IstGesperrt")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("LetzterLogin")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("LoginVersuche")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Passwort")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PersonId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Rolle")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Sicherheitsfrage")
                         .HasColumnType("TEXT");
@@ -52,12 +58,86 @@ namespace Backend.Data.Migrations
                         new
                         {
                             Id = 1,
+                            HasExtendedRights = false,
+                            IstGesperrt = false,
                             LetzterLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LoginVersuche = 0,
+                            Passwort = "AYgdFleLHESvoYA29zlEZrdl4z5Be36ibZWa+ozs4r6lPBkxhIEReGvXWEsIunduCQ==",
                             PersonId = 1,
-                            Rolle = "Pförtner",
+                            Sicherheitsfrage = "Wie hieß Ihr erstes Haustier?",
+                            SicherheitsfrageAntwort = "Hundi"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            HasExtendedRights = true,
+                            IstGesperrt = false,
+                            LetzterLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LoginVersuche = 0,
+                            Passwort = "AYgdFleLHESvoYA29zlEZrdl4z5Be36ibZWa+ozs4r6lPBkxhIEReGvXWEsIunduCQ==",
+                            PersonId = 2,
                             Sicherheitsfrage = "Wie hieß Ihr erstes Haustier?",
                             SicherheitsfrageAntwort = "Hundi"
                         });
+                });
+
+            modelBuilder.Entity("Backend.Data.Models.Besuch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Endzeit")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Startzeit")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Besuch");
+                });
+
+            modelBuilder.Entity("Backend.Data.Models.BesuchBesucher", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BesuchId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BesucherId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BesuchId");
+
+                    b.HasIndex("BesucherId");
+
+                    b.ToTable("BesuchBesucher");
+                });
+
+            modelBuilder.Entity("Backend.Data.Models.BesuchRaum", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BesuchId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("RaumId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BesuchId");
+
+                    b.HasIndex("RaumId");
+
+                    b.ToTable("BesuchRaum");
                 });
 
             modelBuilder.Entity("Backend.Data.Models.Besucher", b =>
@@ -83,7 +163,7 @@ namespace Backend.Data.Migrations
                         {
                             Id = 1,
                             Gesundheitsstatus = "gesund",
-                            PersonId = 2
+                            PersonId = 3
                         });
                 });
 
@@ -155,6 +235,8 @@ namespace Backend.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email");
+
                     b.ToTable("Person");
 
                     b.HasData(
@@ -175,6 +257,15 @@ namespace Backend.Data.Migrations
                             SysStampIn = new DateTime(2020, 3, 21, 12, 1, 0, 0, DateTimeKind.Unspecified),
                             Telefon = "0561 123 4568",
                             Vorname = "Martina"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "erika.mustermann@test.de",
+                            Name = "Mustermann",
+                            SysStampIn = new DateTime(2020, 3, 21, 12, 1, 0, 0, DateTimeKind.Unspecified),
+                            Telefon = "0561 123 4569",
+                            Vorname = "Erika"
                         });
                 });
 
@@ -216,6 +307,36 @@ namespace Backend.Data.Migrations
                     b.HasOne("Backend.Data.Models.Person", "Person")
                         .WithMany()
                         .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Backend.Data.Models.BesuchBesucher", b =>
+                {
+                    b.HasOne("Backend.Data.Models.Besuch", "Besuch")
+                        .WithMany()
+                        .HasForeignKey("BesuchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Data.Models.Besucher", "Besucher")
+                        .WithMany()
+                        .HasForeignKey("BesucherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Backend.Data.Models.BesuchRaum", b =>
+                {
+                    b.HasOne("Backend.Data.Models.Besuch", "Besuch")
+                        .WithMany()
+                        .HasForeignKey("BesuchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Data.Models.Raum", "Raum")
+                        .WithMany()
+                        .HasForeignKey("RaumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

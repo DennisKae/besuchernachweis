@@ -57,7 +57,6 @@ namespace Backend.WebApi
             //    };
             //});
 
-
             // Swagger
             services.AddSwaggerGen(c =>
             {
@@ -96,6 +95,11 @@ namespace Backend.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             loggerFactory.AddLog4Net();
 

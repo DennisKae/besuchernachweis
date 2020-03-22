@@ -13,15 +13,5 @@ namespace Backend.Core.ViewModels
         public string Bezeichnung { get; set; }
 
         public List<RaumViewModel> Raeume { get; set; }
-
-        public static GebaeudeViewModel GetMock()
-        {
-            return new GebaeudeViewModel
-            {
-                Id = 99,
-                Bezeichnung = "Gebäude 1",
-                Raeume = RaumViewModel.GetMocks()
-            };
-        }
     }
 }

@@ -28,6 +28,10 @@ namespace Backend.WebApi.Controllers
             {
                 return StatusCode(400, customException.Message);
             }
+            catch (ArgumentNullException argumenNullException)
+            {
+                return StatusCode(400, "Bitte überprüfen Sie Ihre Eingaben.");
+            }
             catch (Exception exception)
             {
                 _logger.LogCritical(exception, exception.Message);

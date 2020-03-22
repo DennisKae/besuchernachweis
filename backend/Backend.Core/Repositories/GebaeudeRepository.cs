@@ -42,5 +42,13 @@ namespace Backend.Core.Repositories
         {
             _databaseContext.Raum.Remove(_databaseContext.Raum.FirstOrDefault(x => x.Id == id));
         }
+
+        public List<Raum> GetRaeumeByBesuch(Besuch besuch)
+        {
+            return _databaseContext.BesuchRaum
+                .Where(x => x.BesuchId == besuch.Id)
+                .Select(x => x.Raum)
+                .ToList();
+        }
     }
 }

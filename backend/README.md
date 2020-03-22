@@ -2,8 +2,9 @@
 
 - Die Kommunikation mit dem Frontend erfolgt ausschließlich über ViewModels
 - Im Projektordner *Backend.WebApi* befindet sich ein Dockerfile
+- Die Anwendung verfügt über eine OpenAPI (Swagger) Konfiguration. Diese befindet sich unter /swagger
 
-## Environment Variablen
+## Notwendige Environment Variablen
 
 - ***DATENBANKPFAD*** -> Pfad zur Datenbank. Muss auf .db enden.
 - ***APPSECRET*** -> Passwort, mit dem die JWT Tokens generiert werden.

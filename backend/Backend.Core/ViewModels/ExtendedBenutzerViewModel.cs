@@ -7,16 +7,15 @@ using System.Threading.Tasks;
 
 namespace Backend.Core.ViewModels
 {
-    public class NeuerBesuchViewModel
+    public class ExtendedBenutzerViewModel : BenutzerViewModel
     {
-
-        /// <summary>Benutzer-IDs der Besucher</summary>
         [Required]
-        public List<int> Besucher { get; set; }
+        public string Passwort { get; set; }
 
-        /// <summary>IDs der Räume</summary>
         [Required]
-        public List<int> Raeume { get; set; }
+        public string PasswortWiederholung { get; set; }
 
+        [Required]
+        public string SicherheitsfrageAntwort { get; set; }
     }
 }
