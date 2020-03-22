@@ -3,7 +3,7 @@ version: "3.7"
 services:
   backend:
     container_name: backend
-    image: denniska/backendwebapi
+    image: denniska/besuchernachweis-backend
     environment:
         DATENBANKPFAD: /app/data/Besuchernachweis.db
         TOKENLIFETIME: 12
