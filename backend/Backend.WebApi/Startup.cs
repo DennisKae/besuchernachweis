@@ -9,6 +9,7 @@ using AutoMapper;
 using Backend.Core;
 using Backend.Core.Repositories;
 using Backend.Data;
+using Backend.Data.Objects;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

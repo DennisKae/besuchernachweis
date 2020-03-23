@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Backend.Core.Services.Interfaces;
 using Backend.Core.ViewModels;
-using Backend.Data;
+using Backend.Data.Objects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

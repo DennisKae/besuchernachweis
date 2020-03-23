@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Backend.Data
+namespace Backend.Data.Objects
 {
     public static class EnvironmentVariableValues
     {
