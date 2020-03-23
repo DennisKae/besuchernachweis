@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Backend.Core.Services;
 using Backend.Core.Services.Interfaces;
 using Backend.Core.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -28,13 +27,24 @@ namespace Backend.WebApi.Controllers
         }
 
         /// <summary>Liefert alle Besucher</summary>
-        [Route("")]
-        [HttpGet]
-        public IActionResult GetAll()
+        [Route("[action]")]
+        [HttpPost]
+        public IActionResult ByFilter(BesucherFilterViewModel besucherFilterViewModel)
         {
             return Execute(() =>
             {
-                return BesucherViewModel.GetMock();
+                return _besucherService.GetByFilterViewModel(besucherFilterViewModel);
+            });
+        }
+
+        /// <summary>Liefert die Anzahl der aktiven Besucher</summary>
+        [Route("[action]")]
+        [HttpGet]
+        public IActionResult AktiveBesucher()
+        {
+            return Execute(() =>
+            {
+                return _besucherService.GetAnzahlAktiverBesucher();
             });
         }
 
@@ -42,11 +52,11 @@ namespace Backend.WebApi.Controllers
         [Route("")]
         [HttpPost]
         [ProducesResponseType(typeof(BesucherViewModel), StatusCodes.Status200OK)]
-        public IActionResult Add(BesucherViewModel besucherViewModel)
+        public IActionResult Create(BesucherViewModel besucherViewModel)
         {
             return Execute(() =>
             {
-                return _besucherService.AddBesucher(besucherViewModel);
+                return _besucherService.Create(besucherViewModel);
             });
         }
     }

@@ -16,6 +16,8 @@ namespace Backend.Core.ViewModels
 
         public string Rolle { get; set; }
 
+        public bool HasExtendedRights { get; set; }
+
         public PersonViewModel Person { get; set; }
 
         public static BenutzerViewModel GetMock()

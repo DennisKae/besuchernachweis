@@ -11,9 +11,15 @@ namespace Backend.Data
         public DbSet<Person> Person { get; set; }
         public DbSet<Benutzer> Benutzer { get; set; }
         public DbSet<Besucher> Besucher { get; set; }
+
         public DbSet<Konfiguration> Konfiguration { get; set; }
+
         public DbSet<Gebaeude> Gebaeude { get; set; }
         public DbSet<Raum> Raum { get; set; }
+
+        public DbSet<Besuch> Besuch { get; set; }
+        public DbSet<BesuchBesucher> BesuchBesucher { get; set; }
+        public DbSet<BesuchRaum> BesuchRaum { get; set; }
 
 
         public DatabaseContext(string datenbankPfad)
@@ -38,6 +44,7 @@ namespace Backend.Data
         {
             modelBuilder?.Entity<Person>(entity =>
             {
+                entity.HasIndex(x => x.Email);
                 entity.Property(x => x.SysStampIn).HasDefaultValueSql("datetime('now','localtime')");
                 entity.HasData(new Person[]{
                     new Person
@@ -57,6 +64,15 @@ namespace Backend.Data
                         Email = "martina.mustermann@test.de",
                         Telefon = "0561 123 4568",
                         SysStampIn = new DateTime(2020,03,21,12,1,0)
+                    },
+                    new Person
+                    {
+                        Id = 3,
+                        Name ="Mustermann",
+                        Vorname = "Erika",
+                        Email = "erika.mustermann@test.de",
+                        Telefon = "0561 123 4569",
+                        SysStampIn = new DateTime(2020,03,21,12,1,0)
                     }
                 });
             });
@@ -67,11 +83,22 @@ namespace Backend.Data
                 new Benutzer
                 {
                     Id = 1,
+                    Passwort = "AYgdFleLHESvoYA29zlEZrdl4z5Be36ibZWa+ozs4r6lPBkxhIEReGvXWEsIunduCQ==",
                     Sicherheitsfrage = "Wie hieß Ihr erstes Haustier?",
                     SicherheitsfrageAntwort = "Hundi",
-                    Rolle = "Pförtner",
+                    HasExtendedRights = false,
                     PersonId = 1
-                }});
+                },
+                new Benutzer
+                {
+                    Id = 2,
+                    Passwort = "AYgdFleLHESvoYA29zlEZrdl4z5Be36ibZWa+ozs4r6lPBkxhIEReGvXWEsIunduCQ==",
+                    Sicherheitsfrage = "Wie hieß Ihr erstes Haustier?",
+                    SicherheitsfrageAntwort = "Hundi",
+                    HasExtendedRights = true,
+                    PersonId = 2
+                }
+                });
             });
 
             modelBuilder.Entity<Besucher>(entity =>
@@ -80,7 +107,7 @@ namespace Backend.Data
                     new Besucher
                     {
                         Id = 1,
-                        PersonId = 2,
+                        PersonId = 3,
                         Gesundheitsstatus = "gesund"
                     }
                 });

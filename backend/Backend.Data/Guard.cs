@@ -12,7 +12,15 @@ namespace Backend.Data
         {
             if (target == null)
             {
-                throw new ArgumentNullException(nameOrDescription);
+                throw new CheckInputException(nameOrDescription);
+            }
+        }
+
+        public static void IsNotNull(object target)
+        {
+            if (target == null)
+            {
+                throw new CheckInputException();
             }
         }
     }

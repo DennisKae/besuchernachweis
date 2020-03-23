@@ -3,6 +3,7 @@ using AutoMapper;
 using Backend.Core.Repositories;
 using Backend.Core.Services.Interfaces;
 using Backend.Core.ViewModels;
+using Backend.Data;
 using Backend.Data.Models;
 using Microsoft.Extensions.Logging;
 
@@ -11,14 +12,11 @@ namespace Backend.Core.Services
     public class BenutzerService : IBenutzerService
     {
         private readonly IMapper _mapper;
-        private readonly ILogger<BenutzerService> _logger;
 
         public BenutzerService(
-            IMapper mapper,
-            ILogger<BenutzerService> logger)
+            IMapper mapper)
         {
             _mapper = mapper;
-            _logger = logger;
         }
 
         public Benutzer GetByEmail(string email)
@@ -35,31 +33,45 @@ namespace Backend.Core.Services
             }
         }
 
-        public LoginResultViewModel Login(LoginViewModel loginViewModel)
+        public Benutzer CreateBenutzer(Benutzer benutzer)
         {
-            var user = GetByEmail(loginViewModel?.Email);
-            if (user == null)
+            Guard.IsNotNull(benutzer, nameof(benutzer));
+            benutzer.LetzterLogin = DateTime.Now;
+            using (var unit = new UnitOfWork())
             {
-                throw new CustomException("Benutzername oder Passwort falsch.");
+                var benutzerRepo = unit.GetRepository<BenutzerRepository>();
+                benutzerRepo.CreateBenutzer(benutzer);
+
+                unit.SaveChanges();
+                return benutzer;
             }
-
-            _logger.LogDebug($"Erfolgreicher Loginversuch des Benutzers {loginViewModel?.Email}.");
-
-            SetLastLogin(user);
-
-            return _mapper.Map<LoginResultViewModel>(user);
         }
 
-        private void SetLastLogin(Benutzer benutzer)
+        public BenutzerViewModel Update(ExtendedBenutzerViewModel benutzer)
         {
-            benutzer.LetzterLogin = DateTime.Now;
+            Guard.IsNotNull(benutzer, nameof(benutzer));
+
+            if (benutzer.Passwort != benutzer.PasswortWiederholung)
+            {
+                throw new CustomException("Das Passwort wurde nicht korrekt wiederholt.");
+            }
 
             using (var unit = new UnitOfWork())
             {
                 var benutzerRepo = unit.GetRepository<BenutzerRepository>();
-                benutzerRepo.Update(benutzer);
+                var dbBenutzer = benutzerRepo.GetByEmail(benutzer?.Person?.Email);
+                if (dbBenutzer == null)
+                {
+                    throw new CustomException("Der Benutzer wurde nicht gefunden");
+                }
+
+                dbBenutzer = _mapper.Map(benutzer, dbBenutzer);
+                benutzerRepo.Update(dbBenutzer);
+
                 unit.SaveChanges();
+                return _mapper.Map<BenutzerViewModel>(dbBenutzer);
             }
         }
+
     }
 }

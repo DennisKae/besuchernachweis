@@ -20,14 +20,13 @@ namespace Backend.WebApi.Controllers
     [Route("api/[controller]")]
     public class AuthController : BaseController<AuthController>
     {
-        private readonly IBenutzerService _benutzerService;
-
+        private readonly IAuthService _authService;
 
         public AuthController(
             ILogger<AuthController> logger,
-            IBenutzerService benutzerService) : base(logger)
+            IAuthService authService) : base(logger)
         {
-            _benutzerService = benutzerService;
+            _authService = authService;
         }
 
         [AllowAnonymous]
@@ -37,7 +36,7 @@ namespace Backend.WebApi.Controllers
         {
             return Execute(() =>
             {
-                var result = _benutzerService.Login(loginViewModel);
+                var result = _authService.Login(loginViewModel);
                 SetToken(result);
                 return result;
             });
@@ -46,12 +45,13 @@ namespace Backend.WebApi.Controllers
         [AllowAnonymous]
         [HttpPost("[action]")]
         [ProducesResponseType(typeof(LoginResultViewModel), StatusCodes.Status200OK)]
-        public IActionResult Register(BenutzerViewModel benutzerViewModel)
+        public IActionResult Register(ExtendedBenutzerViewModel benutzerViewModel)
         {
             return Execute(() =>
             {
-                _logger.LogDebug($"Benutzerregistrierung durch {benutzerViewModel?.Person?.Email}.");
-                return BenutzerViewModel.GetMock() as LoginResultViewModel;
+                var result = _authService.Register(benutzerViewModel);
+                SetToken(result);
+                return result;
             });
         }
 

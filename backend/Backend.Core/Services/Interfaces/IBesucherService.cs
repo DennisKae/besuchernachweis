@@ -1,9 +1,12 @@
-﻿using Backend.Core.ViewModels;
+﻿using System.Collections.Generic;
+using Backend.Core.ViewModels;
 
-namespace Backend.Core.Services
+namespace Backend.Core.Services.Interfaces
 {
     public interface IBesucherService
     {
-        BesucherViewModel AddBesucher(BesucherViewModel besucherViewModel);
+        int GetAnzahlAktiverBesucher();
+        BesucherViewModel Create(BesucherViewModel besucherViewModel);
+        List<BesucherViewModel> GetByFilterViewModel(BesucherFilterViewModel besucherFilterViewModel);
     }
 }

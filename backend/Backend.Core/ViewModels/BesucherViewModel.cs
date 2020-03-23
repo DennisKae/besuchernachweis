@@ -13,12 +13,5 @@ namespace Backend.Core.ViewModels
         public PersonViewModel Person { get; set; }
 
         public string Gesundheitsstatus { get; set; }
-
-        public static BesucherViewModel GetMock() => new BesucherViewModel
-        {
-            Id = 99,
-            Person = PersonViewModel.GetMock(),
-            Gesundheitsstatus = "gesund"
-        };
     }
 }

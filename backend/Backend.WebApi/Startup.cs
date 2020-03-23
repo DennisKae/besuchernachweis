@@ -38,6 +38,8 @@ namespace Backend.WebApi
         {
             services.AddControllers();
 
+            LogEnvironmentVariables();
+
             var key = Encoding.UTF8.GetBytes(EnvironmentVariableValues.AppSecret);
             services.AddAuthentication(x =>
             {
@@ -57,13 +59,12 @@ namespace Backend.WebApi
             //    };
             //});
 
-
             // Swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Besuchernachweis " + Assembly.GetExecutingAssembly().GetName().Name + " API",
+                    Title = "Besuchernachweis - " + Assembly.GetExecutingAssembly().GetName().Name + " API",
                     Version = "v1"
                 });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -97,6 +98,11 @@ namespace Backend.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
             loggerFactory.AddLog4Net();
 
             app.UseRouting();
@@ -124,6 +130,14 @@ namespace Backend.WebApi
             {
                 databaseContext.Database.Migrate();
             }
+        }
+
+        private void LogEnvironmentVariables()
+        {
+            Console.WriteLine("Ausgelesene Environmentvariable: " + EnvironmentVariableValues.DatenbankPfadKey + ": " + EnvironmentVariableValues.Datenbankpfad);
+            Console.WriteLine("Ausgelesene Environmentvariable: " + EnvironmentVariableValues.LoginversucheKey + ": " + EnvironmentVariableValues.Loginversuche);
+            Console.WriteLine("Ausgelesene Environmentvariable: " + EnvironmentVariableValues.TokenLifeTimeKey + ": " + EnvironmentVariableValues.TokenLifetime);
+            Console.WriteLine("Ausgelesene Environmentvariable: " + EnvironmentVariableValues.AppSecretKey + ": " + EnvironmentVariableValues.AppSecret);
         }
     }
 }

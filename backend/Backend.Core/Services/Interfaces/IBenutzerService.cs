@@ -5,7 +5,8 @@ namespace Backend.Core.Services.Interfaces
 {
     public interface IBenutzerService
     {
+        Benutzer CreateBenutzer(Benutzer benutzer);
         Benutzer GetByEmail(string email);
-        LoginResultViewModel Login(LoginViewModel loginViewModel);
+        BenutzerViewModel Update(ExtendedBenutzerViewModel benutzer);
     }
 }

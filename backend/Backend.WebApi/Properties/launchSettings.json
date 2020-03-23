@@ -12,13 +12,14 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "swagger",
       "environmentVariables": {
+        "APPSECRET": "AppSecret12345",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "Backend.WebApi": {
-      "commandName": "Project",
+      "commandName": "IISExpress",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
@@ -27,6 +28,9 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "TOKENLIFETIME": "12"
       },
+      "sqlDebugging": false,
+      "ancmHostingModel": "OutOfProcess",
+      "nativeDebugging": false,
       "applicationUrl": "http://localhost:5000"
     },
     "Docker": {

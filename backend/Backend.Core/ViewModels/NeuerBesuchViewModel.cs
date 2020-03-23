@@ -18,7 +18,5 @@ namespace Backend.Core.ViewModels
         [Required]
         public List<int> Raeume { get; set; }
 
-        [Required]
-        public ZugangsberechtigungViewModel Zugangsberechtigung { get; set; }
     }
 }
