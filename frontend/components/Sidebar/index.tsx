@@ -10,7 +10,6 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-import DashboardIcon from '@material-ui/icons/Dashboard';
 import InputIcon from '@material-ui/icons/Input';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import DomainIcon from '@material-ui/icons/Domain';
@@ -52,14 +51,6 @@ const Sidebar: React.FunctionComponent<SidebarProps> = ({
   const router = useRouter();
 
   const items: Array<SidebarListItemProps> = [
-    {
-      title: 'Dashboard',
-      link: {
-        href: `/[locale]`,
-        as: `/${locale}`,
-      },
-      icon: <DashboardIcon />,
-    },
     {
       title: t('navigation-register-visitor'),
       link: {
@@ -113,7 +104,7 @@ const Sidebar: React.FunctionComponent<SidebarProps> = ({
             </MenuItem>
           ))}
         </Select>
-        <Profile name="Stephan Gilli" role="Angestellter" />
+        <Profile name="Max Mustermann" role="Angestellter" />
         <Divider />
         <SidebarNav items={items} />
       </div>

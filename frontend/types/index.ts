@@ -46,14 +46,6 @@ export type Visits = {
 
 export type VisitorTableRowProps = Visits;
 
-export type EnhancedTableToolbarProps = {
-  numSelected: number;
-};
-
-export type EnhancedTableHeadProps = {
-  cells: Array<string>;
-};
-
 export type EnhancedTableProps = {
   rows: Array<any>;
   rowsPerPageOptions: Array<number>;
@@ -67,26 +59,45 @@ export type EnhancedTableProps = {
   onChangeRowsPerPage: (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
-  displayOnly: boolean;
-  onClickRow: (val: any) => void;
-  buttonLabel?: string;
+  uniqueId: string;
+  onRowClick?: (id: string | number) => void;
+  toolbarSettings: {
+    title: string;
+    tooltipSelected?: {
+      title: string;
+      icon: React.ReactNode;
+      onClick: (ids: Array<string | number>) => void;
+    };
+    tooltipUnselected?: {
+      title: string;
+      icon: React.ReactNode;
+      onClick: () => void;
+    };
+  };
 };
 
 export type VisitorSearch = {
-  name: string;
-  firstName: string;
   startDate: string;
   endDate: string;
 };
 
-export type VisitorTableState = {
+export interface TableState<R> {
   skip: number;
   limit: number;
   count: number;
   page: number;
-  rows: Array<VisitorTableRowProps>;
-  search: VisitorSearch;
-};
+  rows: Array<R>;
+  search: any;
+}
+
+export type TableAction<T> =
+  | {
+      type: 'setRows';
+      payload: { rows: Array<T>; count?: number };
+    }
+  | { type: 'changePage'; payload: { page: number; skip: number } }
+  | { type: 'changeRowsPerPage'; payload: { limit: number } }
+  | { type: 'setSearch'; payload: VisitorSearch };
 
 export type PropertyCardProps = {
   id: string;
@@ -112,15 +123,6 @@ export type PropertyProps = {
   rooms: Array<RoomProps>;
 };
 
-export type VisitorTableAction =
-  | {
-      type: 'setVisitors';
-      payload: { rows: Array<any>; count?: number };
-    }
-  | { type: 'changePage'; payload: { page: number; skip: number } }
-  | { type: 'changeRowsPerPage'; payload: { limit: number } }
-  | { type: 'setSearch'; payload: VisitorSearch };
-
 export type Locale = typeof locales[number];
 export type Strings = {
   [key in Locale]: {
@@ -145,4 +147,61 @@ export type DialogProps = ModalProps & {
   content?: string;
   onAgree: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   onDisagree: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+};
+
+// API
+export type PersonViewModel = {
+  id: number;
+  name: string | null;
+  vorname: string | null;
+  email: string | null;
+  telefon: string | null;
+};
+
+export type RaumViewModel = {
+  id: number;
+  bezeichnung: string;
+};
+
+export type GetBesuchByFilterInput = {
+  skip: number;
+  take: number;
+  startzeit?: string;
+  endzeit?: string;
+};
+
+export type GetBesuchByFilterResponse = Array<{
+  id: number;
+  startzeit: string;
+  endzeit: string | null;
+  besucher: Array<{
+    id: string;
+    person: PersonViewModel;
+    gesundheitsstatus: string;
+  }>;
+  raeume: Array<RaumViewModel>;
+}>;
+
+export type SetBesuchEndzeitpunktInput = {
+  besuchId: number;
+  endzeit: string;
+};
+
+export type GetBesucherByFilterInput = {
+  name?: string;
+  vorname?: string;
+  skip: number;
+  take: number;
+  startzeit?: string;
+  endzeit?: string;
+};
+
+export type RegisterBesucherInput = {
+  person: { name: string; vorname: string; email: string; telefon: string };
+  gesundheitsstatus: string;
+};
+
+export type RegisterBesuchInput = {
+  besucher: Array<number>;
+  raeume: Array<number>;
 };

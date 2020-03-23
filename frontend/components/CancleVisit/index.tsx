@@ -1,57 +1,66 @@
 import * as React from 'react';
-import fetch from 'isomorphic-unfetch';
-import {
-  Grid,
-  Typography,
-  TextField,
-  Input,
-  Button,
-  Card,
-  CardContent,
-} from '@material-ui/core';
-import useVisitorSearchReducer from '../../hooks/useVisitorSearchReducer';
+import moment from 'moment';
+import { Grid, Typography } from '@material-ui/core';
+import InputIcon from '@material-ui/icons/Input';
+import useRestClient from '../../hooks/useRestClient';
+import useTableSearch from '../../hooks/useTableSearch';
 import useTranslations from '../../hooks/useTranslations';
 import Table from '../Table';
-import StatsCard from '../StatsCard';
 import useStyles from './style';
+import { GetBesuchByFilterInput, TableState } from '../../types';
 
-const Dashboard: React.FunctionComponent = () => {
-  const reducer = useVisitorSearchReducer();
+function mapStateToReqBody(
+  state: Omit<TableState<any>, 'Rows'>
+): GetBesuchByFilterInput {
+  return {
+    skip: state.skip,
+    take: state.limit,
+  };
+}
+
+const CancleVisit: React.FunctionComponent = () => {
+  const reducer = useTableSearch<any>();
+  const { client, setIsLoading, setHasError } = useRestClient();
   if (!reducer) return null;
 
-  const {
-    state: { skip, limit, count, page, rows, search },
-    dispatch,
-  } = reducer;
+  const { state, dispatch } = reducer;
+
+  async function getBesuchByFilter() {
+    const res = await client.getBesuchByFilter(mapStateToReqBody(state));
+    if (res)
+      dispatch({
+        type: 'setRows',
+        payload: {
+          rows: res.map(p => ({
+            id: p.id,
+            'start-date': `${moment(p.startzeit).format('DD.MM.YYYY, HH:mm')}`,
+            name: `${p.besucher[0].person.name}, ${p.besucher[0].person.vorname}`,
+            'property-rooms': p.raeume.map(r => `${r.bezeichnung}`).join(', '),
+          })),
+          count: res.length,
+        },
+      });
+  }
+
+  async function setBesuchEndzeitpunkt(ids: Array<string | number>) {
+    setIsLoading(true);
+    try {
+      for (const id of ids) {
+        await client.setBesuchEndzeitpunkt({
+          besuchId: Number(id),
+          endzeit: moment().toISOString(),
+        });
+      }
+      await getBesuchByFilter();
+    } catch (error) {
+      setIsLoading(false);
+      setHasError(true);
+    }
+  }
 
   React.useEffect(() => {
-    async function getVisitors() {
-      try {
-        const res = await fetch(
-          'http://ec2-3-127-244-90.eu-central-1.compute.amazonaws.com/api/Besuch/GetByFilter',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              vorname: 'Max',
-              name: 'Mustermann',
-              datumVon: search.startDate,
-              datumBis: search.endDate,
-            }),
-          }
-        );
-        if (res.ok) {
-          const data = await res.json();
-          console.log(data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getVisitors();
-  }, []);
+    getBesuchByFilter();
+  }, [state.page, state.limit]);
 
   const classes = useStyles();
   const { t } = useTranslations();
@@ -62,97 +71,20 @@ const Dashboard: React.FunctionComponent = () => {
           <Typography variant="body1">{t('administration')}</Typography>
           <Typography variant="h6">{t('visitor-cancle')}</Typography>
         </Grid>
-        <Grid item xs={12} sm={6}></Grid>
-      </Grid>
-      <Grid container spacing={4}>
-        <Grid item xs={12} sm={6} lg={3} xl={3}>
-          <StatsCard title={t('visitor-count-for-period')} value="200" />
-        </Grid>
-        <Grid item xs={12} sm={6} lg={3} xl={3}>
-          <StatsCard
-            title={t('visitor-count-current-registered')}
-            value={`${rows.length}`}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} lg={3} xl={3} alignItems="center">
-          <Card>
-            <CardContent>
-              <Input
-                placeholder={t('search-name')}
-                style={{
-                  width: '100%',
-                }}
-                value={search.firstName}
-                onChange={event =>
-                  dispatch({
-                    type: 'setSearch',
-                    payload: { ...search, firstName: event.target.value },
-                  })
-                }
-              />
-              <div style={{ marginTop: '8px' }} />
-              <Input
-                placeholder={t('search-first-name')}
-                style={{
-                  width: '100%',
-                }}
-                value={search.name}
-                onChange={event =>
-                  dispatch({
-                    type: 'setSearch',
-                    payload: { ...search, name: event.target.value },
-                  })
-                }
-              />
-              <div style={{ marginTop: '8px' }} />
-              <Button variant="contained" color="primary">
-                {t('search-apply')}
-              </Button>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} lg={3} xl={3} alignItems="center">
-          <Card>
-            <CardContent>
-              <Grid container justify="flex-start">
-                <TextField
-                  style={{ paddingRight: '12px' }}
-                  label={t('search-start-date')}
-                  type="datetime-local"
-                  defaultValue={search.startDate}
-                  onChange={event =>
-                    dispatch({
-                      type: 'setSearch',
-                      payload: { ...search, startDate: event.target.value },
-                    })
-                  }
-                />
-                <TextField
-                  label={t('search-end-date')}
-                  type="datetime-local"
-                  defaultValue={search.endDate}
-                  onChange={event => {
-                    dispatch({
-                      type: 'setSearch',
-                      payload: { ...search, endDate: event.target.value },
-                    });
-                  }}
-                />
-              </Grid>
-            </CardContent>
-          </Card>
-        </Grid>
       </Grid>
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <Table
-            rows={rows}
+            rows={state.rows}
             rowsPerPageOptions={[25, 50, 100]}
-            count={count}
-            rowsPerPage={limit}
-            page={page}
+            count={state.count}
+            rowsPerPage={state.limit}
+            page={state.page}
             onChangePage={(_: any, newPage: number) => {
-              const newSkip = newPage > page ? skip + limit : skip - limit;
+              const newSkip =
+                newPage > state.page
+                  ? state.skip + state.limit
+                  : state.skip - state.limit;
               dispatch({
                 type: 'changePage',
                 payload: { skip: newSkip, page: newPage },
@@ -162,9 +94,15 @@ const Dashboard: React.FunctionComponent = () => {
               const limit = Number(event.target.value);
               dispatch({ type: 'changeRowsPerPage', payload: { limit } });
             }}
-            displayOnly={false}
-            onClickRow={val => console.log(val)}
-            buttonLabel="Abmelden"
+            uniqueId="id"
+            toolbarSettings={{
+              title: t('visitor-current-registered'),
+              tooltipSelected: {
+                title: t('visitor-cancle'),
+                icon: <InputIcon />,
+                onClick: async ids => setBesuchEndzeitpunkt(ids),
+              },
+            }}
           />
         </Grid>
       </Grid>
@@ -172,4 +110,4 @@ const Dashboard: React.FunctionComponent = () => {
   );
 };
 
-export default Dashboard;
+export default CancleVisit;

@@ -104,23 +104,20 @@ module.exports =
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! isomorphic-unfetch */ "isomorphic-unfetch");
-/* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "moment");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core */ "@material-ui/core");
 /* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _hooks_useVisitorSearchReducer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../hooks/useVisitorSearchReducer */ "./hooks/useVisitorSearchReducer.tsx");
-/* harmony import */ var _hooks_useTranslations__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../hooks/useTranslations */ "./hooks/useTranslations.tsx");
-/* harmony import */ var _Table__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Table */ "./components/Table/index.tsx");
-/* harmony import */ var _StatsCard__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../StatsCard */ "./components/StatsCard/index.tsx");
-/* harmony import */ var _style__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./style */ "./components/CancleVisit/style.tsx");
+/* harmony import */ var _material_ui_icons_Input__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/icons/Input */ "@material-ui/icons/Input");
+/* harmony import */ var _material_ui_icons_Input__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Input__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _hooks_useRestClient__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../hooks/useRestClient */ "./hooks/useRestClient.tsx");
+/* harmony import */ var _hooks_useTableSearch__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../hooks/useTableSearch */ "./hooks/useTableSearch.tsx");
+/* harmony import */ var _hooks_useTranslations__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../hooks/useTranslations */ "./hooks/useTranslations.tsx");
+/* harmony import */ var _Table__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Table */ "./components/Table/index.tsx");
+/* harmony import */ var _style__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./style */ "./components/CancleVisit/style.tsx");
 var _jsxFileName = "/Users/stephangilli/projects/besuchernachweis/frontend/components/CancleVisit/index.tsx";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0__["createElement"];
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
@@ -130,58 +127,73 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+function mapStateToReqBody(state) {
+  return {
+    skip: state.skip,
+    take: state.limit
+  };
+}
 
-const Dashboard = () => {
-  const reducer = Object(_hooks_useVisitorSearchReducer__WEBPACK_IMPORTED_MODULE_3__["default"])();
+const CancleVisit = () => {
+  const reducer = Object(_hooks_useTableSearch__WEBPACK_IMPORTED_MODULE_5__["default"])();
+  const {
+    client,
+    setIsLoading,
+    setHasError
+  } = Object(_hooks_useRestClient__WEBPACK_IMPORTED_MODULE_4__["default"])();
   if (!reducer) return null;
   const {
-    state: {
-      skip,
-      limit,
-      count,
-      page,
-      rows,
-      search
-    },
+    state,
     dispatch
   } = reducer;
-  react__WEBPACK_IMPORTED_MODULE_0__["useEffect"](() => {
-    async function getVisitors() {
-      try {
-        const res = await isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_1___default()('http://ec2-3-127-244-90.eu-central-1.compute.amazonaws.com/api/Besuch/GetByFilter', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            vorname: 'Max',
-            name: 'Mustermann',
-            datumVon: search.startDate,
-            datumBis: search.endDate
-          })
-        });
 
-        if (res.ok) {
-          const data = await res.json();
-          console.log(data);
-        }
-      } catch (error) {
-        console.log(error);
+  async function getBesuchByFilter() {
+    const res = await client.getBesuchByFilter(mapStateToReqBody(state));
+    if (res) dispatch({
+      type: 'setRows',
+      payload: {
+        rows: res.map(p => ({
+          id: p.id,
+          'start-date': `${moment__WEBPACK_IMPORTED_MODULE_1___default()(p.startzeit).format('DD.MM.YYYY, HH:mm')}`,
+          name: `${p.besucher[0].person.name}, ${p.besucher[0].person.vorname}`,
+          'property-rooms': p.raeume.map(r => `${r.bezeichnung}`).join(', ')
+        })),
+        count: res.length
       }
-    }
+    });
+  }
 
-    getVisitors();
-  }, []);
-  const classes = Object(_style__WEBPACK_IMPORTED_MODULE_7__["default"])();
+  async function setBesuchEndzeitpunkt(ids) {
+    setIsLoading(true);
+
+    try {
+      for (const id of ids) {
+        await client.setBesuchEndzeitpunkt({
+          besuchId: Number(id),
+          endzeit: moment__WEBPACK_IMPORTED_MODULE_1___default()().toISOString()
+        });
+      }
+
+      await getBesuchByFilter();
+    } catch (error) {
+      setIsLoading(false);
+      setHasError(true);
+    }
+  }
+
+  react__WEBPACK_IMPORTED_MODULE_0__["useEffect"](() => {
+    getBesuchByFilter();
+  }, [state.page, state.limit]);
+  const classes = Object(_style__WEBPACK_IMPORTED_MODULE_8__["default"])();
   const {
     t
-  } = Object(_hooks_useTranslations__WEBPACK_IMPORTED_MODULE_4__["default"])();
+  } = Object(_hooks_useTranslations__WEBPACK_IMPORTED_MODULE_6__["default"])();
   return __jsx("div", {
     className: classes.root,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 59,
+      lineNumber: 68,
       columnNumber: 5
     }
   }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Grid"], {
@@ -190,7 +202,7 @@ const Dashboard = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 60,
+      lineNumber: 69,
       columnNumber: 7
     }
   }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Grid"], {
@@ -200,7 +212,7 @@ const Dashboard = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 61,
+      lineNumber: 70,
       columnNumber: 9
     }
   }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Typography"], {
@@ -208,7 +220,7 @@ const Dashboard = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 62,
+      lineNumber: 71,
       columnNumber: 11
     }
   }, t('administration')), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Typography"], {
@@ -216,242 +228,16 @@ const Dashboard = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 63,
-      columnNumber: 11
-    }
-  }, t('visitor-cancle'))), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Grid"], {
-    item: true,
-    xs: 12,
-    sm: 6,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 65,
-      columnNumber: 9
-    }
-  })), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Grid"], {
-    container: true,
-    spacing: 4,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 67,
-      columnNumber: 7
-    }
-  }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Grid"], {
-    item: true,
-    xs: 12,
-    sm: 6,
-    lg: 3,
-    xl: 3,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 68,
-      columnNumber: 9
-    }
-  }, __jsx(_StatsCard__WEBPACK_IMPORTED_MODULE_6__["default"], {
-    title: t('visitor-count-for-period'),
-    value: "200",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 69,
-      columnNumber: 11
-    }
-  })), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Grid"], {
-    item: true,
-    xs: 12,
-    sm: 6,
-    lg: 3,
-    xl: 3,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 71,
-      columnNumber: 9
-    }
-  }, __jsx(_StatsCard__WEBPACK_IMPORTED_MODULE_6__["default"], {
-    title: t('visitor-count-current-registered'),
-    value: `${rows.length}`,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
       lineNumber: 72,
       columnNumber: 11
     }
-  })), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Grid"], {
-    item: true,
-    xs: 12,
-    sm: 6,
-    lg: 3,
-    xl: 3,
-    alignItems: "center",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 77,
-      columnNumber: 9
-    }
-  }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Card"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 78,
-      columnNumber: 11
-    }
-  }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["CardContent"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 79,
-      columnNumber: 13
-    }
-  }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Input"], {
-    placeholder: t('search-name'),
-    style: {
-      width: '100%'
-    },
-    value: search.firstName,
-    onChange: event => dispatch({
-      type: 'setSearch',
-      payload: _objectSpread({}, search, {
-        firstName: event.target.value
-      })
-    }),
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 80,
-      columnNumber: 15
-    }
-  }), __jsx("div", {
-    style: {
-      marginTop: '8px'
-    },
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 93,
-      columnNumber: 15
-    }
-  }), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Input"], {
-    placeholder: t('search-first-name'),
-    style: {
-      width: '100%'
-    },
-    value: search.name,
-    onChange: event => dispatch({
-      type: 'setSearch',
-      payload: _objectSpread({}, search, {
-        name: event.target.value
-      })
-    }),
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 94,
-      columnNumber: 15
-    }
-  }), __jsx("div", {
-    style: {
-      marginTop: '8px'
-    },
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 107,
-      columnNumber: 15
-    }
-  }), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Button"], {
-    variant: "contained",
-    color: "primary",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 108,
-      columnNumber: 15
-    }
-  }, t('search-apply'))))), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Grid"], {
-    item: true,
-    xs: 12,
-    sm: 6,
-    lg: 3,
-    xl: 3,
-    alignItems: "center",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 114,
-      columnNumber: 9
-    }
-  }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Card"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 115,
-      columnNumber: 11
-    }
-  }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["CardContent"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 116,
-      columnNumber: 13
-    }
-  }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Grid"], {
-    container: true,
-    justify: "flex-start",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 117,
-      columnNumber: 15
-    }
-  }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["TextField"], {
-    style: {
-      paddingRight: '12px'
-    },
-    label: t('search-start-date'),
-    type: "datetime-local",
-    defaultValue: search.startDate,
-    onChange: event => dispatch({
-      type: 'setSearch',
-      payload: _objectSpread({}, search, {
-        startDate: event.target.value
-      })
-    }),
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 118,
-      columnNumber: 17
-    }
-  }), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["TextField"], {
-    label: t('search-end-date'),
-    type: "datetime-local",
-    defaultValue: search.endDate,
-    onChange: event => {
-      dispatch({
-        type: 'setSearch',
-        payload: _objectSpread({}, search, {
-          endDate: event.target.value
-        })
-      });
-    },
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 130,
-      columnNumber: 17
-    }
-  })))))), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Grid"], {
+  }, t('visitor-cancle')))), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Grid"], {
     container: true,
     spacing: 4,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 146,
+      lineNumber: 75,
       columnNumber: 7
     }
   }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Grid"], {
@@ -460,17 +246,17 @@ const Dashboard = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 147,
+      lineNumber: 76,
       columnNumber: 9
     }
-  }, __jsx(_Table__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    rows: rows,
+  }, __jsx(_Table__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    rows: state.rows,
     rowsPerPageOptions: [25, 50, 100],
-    count: count,
-    rowsPerPage: limit,
-    page: page,
+    count: state.count,
+    rowsPerPage: state.limit,
+    page: state.page,
     onChangePage: (_, newPage) => {
-      const newSkip = newPage > page ? skip + limit : skip - limit;
+      const newSkip = newPage > state.page ? state.skip + state.limit : state.skip - state.limit;
       dispatch({
         type: 'changePage',
         payload: {
@@ -488,19 +274,32 @@ const Dashboard = () => {
         }
       });
     },
-    displayOnly: false,
-    onClickRow: val => console.log(val),
-    buttonLabel: "Abmelden",
+    uniqueId: "id",
+    toolbarSettings: {
+      title: t('visitor-current-registered'),
+      tooltipSelected: {
+        title: t('visitor-cancle'),
+        icon: __jsx(_material_ui_icons_Input__WEBPACK_IMPORTED_MODULE_3___default.a, {
+          __self: undefined,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 102,
+            columnNumber: 23
+          }
+        }),
+        onClick: async ids => setBesuchEndzeitpunkt(ids)
+      }
+    },
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 148,
+      lineNumber: 77,
       columnNumber: 11
     }
   }))));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Dashboard);
+/* harmony default export */ __webpack_exports__["default"] = (CancleVisit);
 
 /***/ }),
 
@@ -524,97 +323,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./components/StatsCard/index.tsx":
-/*!****************************************!*\
-  !*** ./components/StatsCard/index.tsx ***!
-  \****************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core */ "@material-ui/core");
-/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _style__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./style */ "./components/StatsCard/style.tsx");
-var _jsxFileName = "/Users/stephangilli/projects/besuchernachweis/frontend/components/StatsCard/index.tsx";
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0__["createElement"];
-
-
-
-
-const StatsCard = ({
-  title,
-  value
-}) => {
-  const classes = Object(_style__WEBPACK_IMPORTED_MODULE_2__["default"])();
-  return __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Card"], {
-    className: classes.root,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 12,
-      columnNumber: 5
-    }
-  }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["CardContent"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 13,
-      columnNumber: 7
-    }
-  }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Typography"], {
-    variant: "body2",
-    className: classes.title,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 14,
-      columnNumber: 9
-    }
-  }, title), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Typography"], {
-    variant: "h4",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 17,
-      columnNumber: 9
-    }
-  }, value)));
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (StatsCard);
-
-/***/ }),
-
-/***/ "./components/StatsCard/style.tsx":
-/*!****************************************!*\
-  !*** ./components/StatsCard/style.tsx ***!
-  \****************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @material-ui/core/styles */ "@material-ui/core/styles");
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_0__);
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_0__["makeStyles"])(() => Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_0__["createStyles"])({
-  root: {
-    height: '100%'
-  },
-  content: {
-    alignItems: 'center',
-    display: 'flex'
-  },
-  title: {
-    fontWeight: 400
-  }
-})));
-
-/***/ }),
-
 /***/ "./components/Table/index.tsx":
 /*!************************************!*\
   !*** ./components/Table/index.tsx ***!
@@ -626,85 +334,22 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core */ "@material-ui/core");
-/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _style__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./style */ "./components/Table/style.tsx");
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clsx */ "clsx");
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clsx__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core */ "@material-ui/core");
+/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _material_ui_core_colors_grey__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/colors/grey */ "@material-ui/core/colors/grey");
+/* harmony import */ var _material_ui_core_colors_grey__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_colors_grey__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _hooks_useTranslations__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../hooks/useTranslations */ "./hooks/useTranslations.tsx");
+/* harmony import */ var _style__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./style */ "./components/Table/style.tsx");
 var _jsxFileName = "/Users/stephangilli/projects/besuchernachweis/frontend/components/Table/index.tsx";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0__["createElement"];
 
 
 
 
-const EnhancedTableHead = ({
-  cells
-}) => {
-  return __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["TableHead"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 22,
-      columnNumber: 5
-    }
-  }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["TableRow"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 23,
-      columnNumber: 7
-    }
-  }, cells.map(cell => __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["TableCell"], {
-    key: cell,
-    align: "left",
-    padding: "default",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 25,
-      columnNumber: 11
-    }
-  }, cell))));
-};
 
-const EnhancedTableToolbar = () => {
-  const classes = Object(_style__WEBPACK_IMPORTED_MODULE_2__["useToolbarStyles"])();
-  return __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Toolbar"], {
-    className: classes.root,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 37,
-      columnNumber: 5
-    }
-  }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Typography"], {
-    className: classes.title,
-    variant: "h6",
-    id: "tableTitle",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 38,
-      columnNumber: 7
-    }
-  }, "Besuche"));
-};
 
-const EnhancedTableCell = ({
-  children
-}) => {
-  const classes = Object(_style__WEBPACK_IMPORTED_MODULE_2__["default"])();
-  return __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["TableCell"], {
-    className: classes.cell,
-    component: "th",
-    scope: "row",
-    padding: "none",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 48,
-      columnNumber: 5
-    }
-  }, children);
-};
 
 function formatValue(val) {
   if (Array.isArray(val)) return val.join(', ');
@@ -719,116 +364,261 @@ const EnhancedTable = ({
   page,
   onChangePage,
   onChangeRowsPerPage,
-  displayOnly,
-  onClickRow,
-  buttonLabel
+  onRowClick,
+  uniqueId,
+  toolbarSettings
 }) => {
-  if (rows.length === 0) return null;
-  const classes = Object(_style__WEBPACK_IMPORTED_MODULE_2__["default"])();
-  const cells = Object.keys(rows[0]);
-  if (!displayOnly) cells.push('');
+  if (rows.length === 0) return null; // state
+
+  const [selected, setSelected] = react__WEBPACK_IMPORTED_MODULE_0__["useState"]([]); // hooks
+
+  const {
+    t
+  } = Object(_hooks_useTranslations__WEBPACK_IMPORTED_MODULE_4__["default"])();
+  const classes = Object(_style__WEBPACK_IMPORTED_MODULE_5__["default"])();
+  const cells = Object.keys(rows[0]).filter(r => r !== uniqueId).map(r => {
+    return {
+      key: r,
+      label: t(r)
+    };
+  });
+
+  const EnhancedTableHead = () => {
+    return __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["TableHead"], {
+      style: {
+        background: _material_ui_core_colors_grey__WEBPACK_IMPORTED_MODULE_3___default.a[200]
+      },
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 55,
+        columnNumber: 7
+      }
+    }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["TableRow"], {
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 56,
+        columnNumber: 9
+      }
+    }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["TableCell"], {
+      padding: "checkbox",
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 57,
+        columnNumber: 11
+      }
+    }), cells.map(cell => __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["TableCell"], {
+      key: cell.key,
+      align: "left",
+      padding: "default",
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 59,
+        columnNumber: 13
+      }
+    }, cell.label))));
+  };
+
+  const EnhancedTableToolbar = () => {
+    const numSelected = selected.length;
+    const classes = Object(_style__WEBPACK_IMPORTED_MODULE_5__["useToolbarStyles"])();
+    return __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Toolbar"], {
+      className: clsx__WEBPACK_IMPORTED_MODULE_1___default()(classes.root, {
+        [classes.highlight]: numSelected > 0
+      }),
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 72,
+        columnNumber: 7
+      }
+    }, numSelected > 0 ? __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Typography"], {
+      className: classes.title,
+      color: "inherit",
+      variant: "subtitle1",
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 78,
+        columnNumber: 11
+      }
+    }, numSelected, " ", t('table-general-selected')) : __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Typography"], {
+      className: classes.title,
+      variant: "h6",
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 86,
+        columnNumber: 11
+      }
+    }, toolbarSettings.title), !onRowClick && __jsx(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, toolbarSettings.tooltipSelected && numSelected > 0 && __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Tooltip"], {
+      title: toolbarSettings.tooltipSelected.title,
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 93,
+        columnNumber: 15
+      }
+    }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["IconButton"], {
+      onClick: () => toolbarSettings.tooltipSelected.onClick(selected),
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 94,
+        columnNumber: 17
+      }
+    }, toolbarSettings.tooltipSelected.icon)), toolbarSettings.tooltipUnselected && numSelected === 0 && __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Tooltip"], {
+      title: toolbarSettings.tooltipUnselected.title,
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 104,
+        columnNumber: 15
+      }
+    }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["IconButton"], {
+      onClick: () => toolbarSettings.tooltipUnselected.onClick(),
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 105,
+        columnNumber: 17
+      }
+    }, toolbarSettings.tooltipUnselected.icon))));
+  };
+
+  const EnhancedTableCell = ({
+    children
+  }) => {
+    const classes = Object(_style__WEBPACK_IMPORTED_MODULE_5__["default"])();
+    return __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["TableCell"], {
+      className: classes.cell,
+      component: "th",
+      scope: "row",
+      padding: "none",
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 121,
+        columnNumber: 7
+      }
+    }, children);
+  };
+
+  const handleRowClick = id => {
+    const selectedIndex = selected.indexOf(id);
+    let newSelected = [];
+    if (selectedIndex === -1) newSelected = newSelected.concat(selected, id);else if (selectedIndex === 0) newSelected = newSelected.concat(selected.slice(1));else if (selectedIndex === selected.length - 1) newSelected = newSelected.concat(selected.slice(0, -1));else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+    }
+    setSelected(newSelected);
+  };
+
   return __jsx("div", {
     className: classes.root,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 81,
+      lineNumber: 150,
       columnNumber: 5
     }
-  }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Paper"], {
+  }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Paper"], {
     className: classes.paper,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 82,
+      lineNumber: 151,
       columnNumber: 7
     }
   }, __jsx(EnhancedTableToolbar, {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 83,
+      lineNumber: 152,
       columnNumber: 9
     }
-  }), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["TableContainer"], {
+  }), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["TableContainer"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 84,
+      lineNumber: 153,
       columnNumber: 9
     }
-  }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Table"], {
+  }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Table"], {
     className: classes.table,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 85,
+      lineNumber: 154,
       columnNumber: 11
     }
   }, __jsx(EnhancedTableHead, {
-    cells: cells,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 86,
+      lineNumber: 155,
       columnNumber: 13
     }
-  }), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["TableBody"], {
+  }), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["TableBody"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 87,
+      lineNumber: 156,
       columnNumber: 13
     }
-  }, rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-    const keys = Object.keys(row);
-    return __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["TableRow"], {
+  }, rows.map((row, index) => {
+    const checked = selected.indexOf(row[uniqueId]) !== -1;
+    return __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["TableRow"], {
       hover: true,
       role: "checkbox",
       tabIndex: -1,
       key: index,
-      __self: undefined,
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 93,
-        columnNumber: 21
-      }
-    }, keys.map((k, index) => {
-      // @ts-ignore
-      const value = formatValue(row[k]);
-      return __jsx(EnhancedTableCell, {
-        key: index,
-        __self: undefined,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 98,
-          columnNumber: 27
-        }
-      }, value);
-    }), !displayOnly && __jsx(EnhancedTableCell, {
-      key: index,
-      __self: undefined,
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 104,
-        columnNumber: 25
-      }
-    }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Button"], {
-      variant: "outlined",
-      color: "secondary",
       onClick: () => {
-        if (row['ID']) onClickRow(row['ID']);
+        const id = row[uniqueId];
+        if (onRowClick) onRowClick(id);else handleRowClick(id);
       },
       __self: undefined,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 105,
-        columnNumber: 27
+        lineNumber: 160,
+        columnNumber: 19
       }
-    }, buttonLabel)));
-  })))), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["TablePagination"], {
+    }, !onRowClick && __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["TableCell"], {
+      padding: "checkbox",
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 172,
+        columnNumber: 23
+      }
+    }, __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Checkbox"], {
+      checked: checked,
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 173,
+        columnNumber: 25
+      }
+    })), cells.map((c, index) => {
+      if (c.key !== uniqueId) {
+        // @ts-ignore
+        const value = formatValue(row[c.key]);
+        return __jsx(EnhancedTableCell, {
+          key: index,
+          __self: undefined,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 181,
+            columnNumber: 27
+          }
+        }, value);
+      }
+    }));
+  })))), __jsx(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["TablePagination"], {
     rowsPerPageOptions: rowsPerPageOptions,
-    labelRowsPerPage: "Datens\xE4tze pro Seite",
+    labelRowsPerPage: t('table-general-rows-per-page'),
     count: count,
     rowsPerPage: rowsPerPage,
     page: page,
@@ -839,11 +629,11 @@ const EnhancedTable = ({
       from,
       to,
       count
-    }) => `${from}-${to} von ${count}`,
+    }) => `${from}-${to} ${t('table-general-displayed-rows-of')} ${count}`,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 122,
+      lineNumber: 193,
       columnNumber: 9
     }
   })));
@@ -954,6 +744,152 @@ const LocaleProvider = ({
 
 /***/ }),
 
+/***/ "./context/RestContext.tsx":
+/*!*********************************!*\
+  !*** ./context/RestContext.tsx ***!
+  \*********************************/
+/*! exports provided: RestProvider, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RestProvider", function() { return RestProvider; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _rest_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../rest-client */ "./rest-client/index.tsx");
+var _jsxFileName = "/Users/stephangilli/projects/besuchernachweis/frontend/context/RestContext.tsx";
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0__["createElement"];
+
+
+const RestContext = react__WEBPACK_IMPORTED_MODULE_0__["createContext"]({
+  client: new _rest_client__WEBPACK_IMPORTED_MODULE_1__["default"](''),
+  isLoading: false,
+  setIsLoading: () => null,
+  setHasError: () => null,
+  hasError: false
+});
+const RestProvider = ({
+  url,
+  children
+}) => {
+  const [isLoading, setIsLoading] = react__WEBPACK_IMPORTED_MODULE_0__["useState"](false);
+  const [hasError, setHasError] = react__WEBPACK_IMPORTED_MODULE_0__["useState"](false);
+  const client = new _rest_client__WEBPACK_IMPORTED_MODULE_1__["default"](url);
+  return __jsx(RestContext.Provider, {
+    value: {
+      client,
+      isLoading,
+      setIsLoading,
+      setHasError,
+      hasError
+    },
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 26,
+      columnNumber: 5
+    }
+  }, children);
+};
+/* harmony default export */ __webpack_exports__["default"] = (RestContext);
+
+/***/ }),
+
+/***/ "./hooks/useRestClient.tsx":
+/*!*********************************!*\
+  !*** ./hooks/useRestClient.tsx ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _context_RestContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/RestContext */ "./context/RestContext.tsx");
+
+
+
+const useRest = () => react__WEBPACK_IMPORTED_MODULE_0__["useContext"](_context_RestContext__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (useRest);
+
+/***/ }),
+
+/***/ "./hooks/useTableSearch.tsx":
+/*!**********************************!*\
+  !*** ./hooks/useTableSearch.tsx ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+const createTableReducer = () => (state, action) => {
+  switch (action.type) {
+    case 'setRows':
+      {
+        if (action.payload.count) return _objectSpread({}, state, {
+          rows: action.payload.rows,
+          count: action.payload.count
+        });else return _objectSpread({}, state, {
+          rows: action.payload.rows
+        });
+      }
+
+    case 'changePage':
+      return _objectSpread({}, state, {
+        page: action.payload.page,
+        skip: action.payload.skip
+      });
+
+    case 'changeRowsPerPage':
+      return _objectSpread({}, state, {
+        limit: action.payload.limit
+      });
+
+    case 'setSearch':
+      {
+        return _objectSpread({}, state, {
+          search: action.payload
+        });
+      }
+
+    default:
+      return state;
+  }
+};
+
+function useSearchStateReducer() {
+  const tableReducer = createTableReducer();
+  const [state, dispatch] = react__WEBPACK_IMPORTED_MODULE_0__["useReducer"](tableReducer, {
+    skip: 0,
+    limit: 50,
+    count: 0,
+    page: 0,
+    rows: [],
+    search: null
+  });
+  return {
+    state,
+    dispatch
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (useSearchStateReducer);
+
+/***/ }),
+
 /***/ "./hooks/useTranslations.tsx":
 /*!***********************************!*\
   !*** ./hooks/useTranslations.tsx ***!
@@ -996,88 +932,6 @@ const useTranslation = () => {
 
 /***/ }),
 
-/***/ "./hooks/useVisitorSearchReducer.tsx":
-/*!*******************************************!*\
-  !*** ./hooks/useVisitorSearchReducer.tsx ***!
-  \*******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "moment");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-
-
-
-const visitorTableReducer = (state, action) => {
-  switch (action.type) {
-    case 'setVisitors':
-      {
-        if (action.payload.count) return _objectSpread({}, state, {
-          rows: action.payload.rows,
-          count: action.payload.count
-        });else return _objectSpread({}, state, {
-          rows: action.payload.rows
-        });
-      }
-
-    case 'changePage':
-      return _objectSpread({}, state, {
-        page: action.payload.page,
-        skip: action.payload.skip
-      });
-
-    case 'changeRowsPerPage':
-      return _objectSpread({}, state, {
-        limit: action.payload.limit
-      });
-
-    case 'setSearch':
-      {
-        return _objectSpread({}, state, {
-          search: action.payload
-        });
-      }
-
-    default:
-      return state;
-  }
-};
-
-const DEFAULT_STATE = {
-  skip: 0,
-  limit: 50,
-  count: 0,
-  page: 0,
-  rows: [],
-  search: {
-    name: '',
-    firstName: '',
-    startDate: moment__WEBPACK_IMPORTED_MODULE_1___default()(new Date().setHours(0, 0, 0, 0)).toISOString(),
-    endDate: moment__WEBPACK_IMPORTED_MODULE_1___default()(new Date().setHours(24, 0, 0, 0)).subtract(1, 'minute').toISOString()
-  }
-};
-const SEARCH_STATE_KEY = 'visitor_search_state';
-
-const useSearchStateReducer = () => {
-  if (false) {}
-
-  return null;
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (useSearchStateReducer);
-
-/***/ }),
-
 /***/ "./pages/[locale]/visitor/cancle.tsx":
 /*!*******************************************!*\
   !*** ./pages/[locale]/visitor/cancle.tsx ***!
@@ -1087,24 +941,138 @@ const useSearchStateReducer = () => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_CancleVisit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../components/CancleVisit */ "./components/CancleVisit/index.tsx");
-var _jsxFileName = "/Users/stephangilli/projects/besuchernachweis/frontend/pages/[locale]/visitor/cancle.tsx";
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0__["createElement"];
+/* harmony import */ var _components_CancleVisit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../components/CancleVisit */ "./components/CancleVisit/index.tsx");
+
+/* harmony default export */ __webpack_exports__["default"] = (_components_CancleVisit__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/***/ }),
+
+/***/ "./rest-client/index.tsx":
+/*!*******************************!*\
+  !*** ./rest-client/index.tsx ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return RestClient; });
+/* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! isomorphic-unfetch */ "isomorphic-unfetch");
+/* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_0__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
-const Visitors = () => __jsx(_components_CancleVisit__WEBPACK_IMPORTED_MODULE_1__["default"], {
-  __self: undefined,
-  __source: {
-    fileName: _jsxFileName,
-    lineNumber: 4,
-    columnNumber: 49
+function fetcher(baseURL) {
+  async function fetchRessource(url, fetchOptions) {
+    const u = `${baseURL}${url}`;
+
+    try {
+      const xhr = await isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_0___default()(u, fetchOptions);
+      if (xhr.ok) return xhr.json();
+      throw new Error(`Unexpected error during fetch of URL ${u}: ${JSON.stringify(xhr)}`);
+    } catch (error) {
+      throw new Error(`Unexpected error during fetch of URL ${u}: ${error}`);
+    }
   }
-});
 
-/* harmony default export */ __webpack_exports__["default"] = (Visitors);
+  return fetchRessource;
+}
+
+class RestClient {
+  constructor(url) {
+    _defineProperty(this, "fetcher", void 0);
+
+    this.fetcher = fetcher(url);
+  }
+
+  async login(props) {
+    return this.fetcher(`Auth/Login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(props)
+    });
+  }
+
+  async register(props) {
+    return this.fetcher(`Auth/Register`, {
+      method: 'POST',
+      hedaders: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(props)
+    });
+  }
+
+  async postBesuch(props) {
+    return this.fetcher(`Besuch`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(props)
+    });
+  }
+
+  async setBesuchEndzeitpunkt(input) {
+    return this.fetcher(`Besuch/SetEndzeitpunkt`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/jsoon'
+      },
+      body: JSON.stringify(input)
+    });
+  }
+
+  async getBesuchByFilter(input) {
+    return this.fetcher(`Besuch/GetByFilter`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(input)
+    });
+  }
+
+  async getBesucherByFilter(input) {
+    return this.fetcher(`Besucher/ByFilter`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(input)
+    });
+  }
+
+  async registerBesucher(input) {
+    return this.fetcher(`Besucher`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(input)
+    });
+  }
+
+  async registerBesuch(input) {
+    return this.fetcher(`Besuch`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(input)
+    });
+  }
+
+  async getGebauede() {
+    return this.fetcher(`Gebaeude`, {
+      method: 'GET'
+    });
+  }
+
+}
 
 /***/ }),
 
@@ -1124,8 +1092,9 @@ const t = {
     'visitor-cancle': 'Cancle visitor',
     'visitor-count-for-period': 'Visitor count for period',
     'visitor-count-current-registered': 'Current visitor count',
-    'search-start-date': 'Start date',
-    'search-end-date': 'End date',
+    'visitor-current-registered': 'Current visits',
+    'start-date': 'Start date',
+    'end-date': 'End date',
     'search-first-name': 'First name',
     'search-name': 'name',
     'search-apply': 'Search',
@@ -1152,7 +1121,11 @@ const t = {
     'register-permission-granted': 'Permission granted',
     'register-new-visitor': 'New Visitor',
     'register-already-existing': 'Already registered',
-    register: 'Register'
+    register: 'Register',
+    'table-general-rows-per-page': 'Rows per Page',
+    'table-general-displayed-rows-of': 'of',
+    'table-general-selected': 'selected',
+    name: 'Name'
   },
   de: {
     administration: 'Verwaltung',
@@ -1160,8 +1133,9 @@ const t = {
     'visitor-cancle': 'Besuch abmelden',
     'visitor-count-for-period': 'Anzahl Besuche im Zeitraum',
     'visitor-count-current-registered': 'Anzahl angemeldeter Besucher',
-    'search-start-date': 'Startdatum',
-    'search-end-date': 'Enddatum',
+    'visitor-current-registered': 'Aktuelle Besuche',
+    'start-date': 'Startdatum',
+    'end-date': 'Enddatum',
     'search-first-name': 'Vorname',
     'search-name': 'Name',
     'search-apply': 'Suchen',
@@ -1188,7 +1162,11 @@ const t = {
     'register-permission-granted': 'Zugangsberechtigung erteilt',
     'register-new-visitor': 'Neuer Besucher',
     'register-already-existing': 'Bereits registriert',
-    register: 'Registrieren'
+    register: 'Registrieren',
+    'table-general-rows-per-page': 'Zeilen pro Seite',
+    'table-general-displayed-rows-of': 'von',
+    'table-general-selected': 'ausgewählt',
+    name: 'Name'
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (t);
@@ -1270,6 +1248,17 @@ module.exports = require("@material-ui/core");
 
 /***/ }),
 
+/***/ "@material-ui/core/colors/grey":
+/*!************************************************!*\
+  !*** external "@material-ui/core/colors/grey" ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("@material-ui/core/colors/grey");
+
+/***/ }),
+
 /***/ "@material-ui/core/styles":
 /*!*******************************************!*\
   !*** external "@material-ui/core/styles" ***!
@@ -1278,6 +1267,28 @@ module.exports = require("@material-ui/core");
 /***/ (function(module, exports) {
 
 module.exports = require("@material-ui/core/styles");
+
+/***/ }),
+
+/***/ "@material-ui/icons/Input":
+/*!*******************************************!*\
+  !*** external "@material-ui/icons/Input" ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("@material-ui/icons/Input");
+
+/***/ }),
+
+/***/ "clsx":
+/*!***********************!*\
+  !*** external "clsx" ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("clsx");
 
 /***/ }),
 
