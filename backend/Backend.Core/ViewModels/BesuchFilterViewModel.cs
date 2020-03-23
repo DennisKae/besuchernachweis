@@ -8,9 +8,11 @@ namespace Backend.Core.ViewModels
 {
     public class BesuchFilterViewModel
     {
-        public DateTime? DatumVon { get; set; }
+        public DateTime? Startzeit { get; set; }
 
-        public DateTime? DatumBis { get; set; }
+        public DateTime? Endzeit { get; set; }
+
+        public bool? IstBeendet { get; set; }
 
         public int? BesucherId { get; set; }
 

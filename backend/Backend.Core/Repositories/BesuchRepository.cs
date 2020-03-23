@@ -44,14 +44,24 @@ namespace Backend.Core.Repositories
         {
             var query = _databaseContext.BesuchBesucher.AsQueryable();
 
-            if (filter.DatumVon.HasValue)
+            if (filter.IstBeendet == true)
             {
-                query = query.Where(x => x.Besuch != null && x.Besuch.Startzeit >= filter.DatumVon.Value);
+                query = query.Where(x => x.Besuch != null && x.Besuch.Endzeit != null);
             }
 
-            if (filter.DatumBis.HasValue)
+            if (filter.IstBeendet == false)
             {
-                query = query.Where(x => x.Besuch != null && (x.Besuch.Endzeit == null || x.Besuch.Endzeit <= filter.DatumBis.Value));
+                query = query.Where(x => x.Besuch != null && x.Besuch.Endzeit == null);
+            }
+
+            if (filter.Startzeit.HasValue)
+            {
+                query = query.Where(x => x.Besuch != null && x.Besuch.Startzeit >= filter.Startzeit.Value);
+            }
+
+            if (filter.Endzeit.HasValue)
+            {
+                query = query.Where(x => x.Besuch != null && x.Besuch.Endzeit <= filter.Endzeit.Value);
             }
 
             if (filter.BesucherId.HasValue)

@@ -42,11 +42,6 @@ namespace Backend.Core.Services
 
         public List<BesucherViewModel> GetByFilterViewModel(BesucherFilterViewModel besucherFilterViewModel)
         {
-            if (besucherFilterViewModel.Take == 0)
-            {
-                return null;
-            }
-
             using (var unit = new UnitOfWork())
             {
                 var besucherRepo = unit.GetRepository<BesucherRepository>();

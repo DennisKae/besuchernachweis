@@ -46,89 +46,60 @@ namespace Backend.Core.Repositories
             return _databaseContext.BesuchBesucher.Where(x => x.Besuch != null && x.Besuch.Endzeit == null).Count();
         }
 
-        public List<Besucher> GetByFilter(BesucherFilterViewModel besucherFilterViewModel)
+        public List<Besucher> GetByFilter(BesucherFilterViewModel filter)
         {
-            var query = _databaseContext.Besucher.AsQueryable();
+            var query = _databaseContext.BesuchBesucher.AsQueryable();
 
-
-            if (!string.IsNullOrWhiteSpace(besucherFilterViewModel.Vorname))
+            if (filter.IstBeendet == true)
             {
-                query = query.Where(x => x.Person != null && x.Person.Vorname.ToLower().Contains(besucherFilterViewModel.Vorname.ToLower()));
+                query = query.Where(x => x.Besuch.Endzeit != null);
             }
 
-            if (!string.IsNullOrWhiteSpace(besucherFilterViewModel.Name))
+            if (filter.IstBeendet == false)
             {
-                query = query.Where(x => x.Person != null && x.Person.Name.ToLower().Contains(besucherFilterViewModel.Name.ToLower()));
+                query = query.Where(x => x.Besuch.Endzeit == null);
             }
 
-            if (!string.IsNullOrWhiteSpace(besucherFilterViewModel.Email))
+            if (!string.IsNullOrWhiteSpace(filter.Vorname))
             {
-                query = query.Where(x => x.Person != null && x.Person.Email.ToLower().Contains(besucherFilterViewModel.Email.ToLower()));
+                query = query.Where(x => x.Besucher != null && x.Besucher.Person != null && x.Besucher.Person.Vorname.ToLower().Contains(filter.Vorname.ToLower()));
             }
 
-            if (besucherFilterViewModel.Startzeit.HasValue && !besucherFilterViewModel.Endzeit.HasValue)
+            if (!string.IsNullOrWhiteSpace(filter.Name))
             {
-                var start = besucherFilterViewModel.Startzeit.Value;
-                List<int> relevanteBesucheBesucherIds = _databaseContext.BesuchBesucher
-                    .Where(x => x.Besuch != null && x.Besuch.Startzeit >= start && (x.Besuch.Endzeit == null || x.Besuch.Endzeit <= start))
-                    .Select(x => x.BesucherId).ToList();
-
-                if (relevanteBesucheBesucherIds?.Count > 0)
-                {
-                    query = query.Where(x => relevanteBesucheBesucherIds.Contains(x.Id));
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            else if (!besucherFilterViewModel.Startzeit.HasValue && besucherFilterViewModel.Endzeit.HasValue)
-            {
-                var ende = besucherFilterViewModel.Endzeit.Value;
-                List<int> relevanteBesucheBesucherIds = _databaseContext.BesuchBesucher
-                    .Where(x => x.Besuch != null && x.Besuch.Startzeit <= ende && (x.Besuch.Endzeit == null || x.Besuch.Endzeit <= ende))
-                    .Select(x => x.BesucherId)
-                    .ToList();
-
-                if (relevanteBesucheBesucherIds?.Count > 0)
-                {
-                    query = query.Where(x => relevanteBesucheBesucherIds.Contains(x.Id));
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            else if (besucherFilterViewModel.Startzeit.HasValue && besucherFilterViewModel.Endzeit.HasValue)
-            {
-                var start = besucherFilterViewModel.Startzeit.Value;
-                var ende = besucherFilterViewModel.Endzeit.Value;
-                List<int> relevanteBesucheBesucherIds = _databaseContext.BesuchBesucher
-                    .Where(x => x.Besuch != null && x.Besuch.Startzeit >= start && (x.Besuch.Endzeit == null || x.Besuch.Endzeit <= ende))
-                    .Select(x => x.BesucherId)
-                    .ToList();
-
-                if (relevanteBesucheBesucherIds?.Count > 0)
-                {
-                    query = query.Where(x => relevanteBesucheBesucherIds.Contains(x.Id));
-                }
-                else
-                {
-                    return null;
-                }
+                query = query.Where(x => x.Besucher != null && x.Besucher.Person != null && x.Besucher.Person.Name.ToLower().Contains(filter.Name.ToLower()));
             }
 
-            if (besucherFilterViewModel.Skip.HasValue)
+            if (!string.IsNullOrWhiteSpace(filter.Email))
             {
-                query = query.Skip(besucherFilterViewModel.Skip.Value);
+                query = query.Where(x => x.Besucher != null && x.Besucher.Person != null && x.Besucher.Person.Email.ToLower().Contains(filter.Email.ToLower()));
             }
 
-            if (besucherFilterViewModel.Take.HasValue)
+            if (filter.Startzeit.HasValue)
             {
-                query = query.Take(besucherFilterViewModel.Take.Value);
+                query = query.Where(x => x.Besuch != null && x.Besuch.Startzeit >= filter.Startzeit.Value);
             }
 
-            return query.ToList();
+            if (filter.Endzeit.HasValue)
+            {
+                query = query.Where(x => x.Besuch != null && x.Besuch.Endzeit <= filter.Endzeit.Value);
+            }
+
+
+            if (filter.Skip.HasValue)
+            {
+                query = query.Skip(filter.Skip.Value);
+            }
+
+            if (filter.Take.HasValue)
+            {
+                query = query.Take(filter.Take.Value);
+            }
+
+            return query
+                .Select(x => x.Besucher)
+                .Include(x => x.Person)
+                .ToList();
         }
     }
 }
