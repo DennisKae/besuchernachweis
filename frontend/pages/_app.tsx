@@ -6,7 +6,10 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { defaultLocale } from '../utils/locales';
 import { LocaleProvider } from '../context/LocaleContext';
+import { RestProvider } from '../context/RestContext';
 import Main from '../components/Main';
+import Alert from '../components/Alert';
+import LoadingOverlay from '../components/LoadingOverlay';
 import theme from '../components/theme';
 
 interface MyAppContext extends AppContext {
@@ -39,9 +42,13 @@ function MyApp({ Component, pageProps }: MyAppContext) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <LocaleProvider initialLocale={locale}>
-          <Main>
-            <Component {...pageProps} />
-          </Main>
+          <RestProvider url="http://ec2-3-127-244-90.eu-central-1.compute.amazonaws.com/api/">
+            <LoadingOverlay />
+            <Main>
+              <Alert />
+              <Component {...pageProps} />
+            </Main>
+          </RestProvider>
         </LocaleProvider>
       </ThemeProvider>
     </React.Fragment>

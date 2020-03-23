@@ -12,7 +12,7 @@ const Index: NextPage = () => (
 
 Index.getInitialProps = async ctx => {
   const locale = detectLocale(ctx.req);
-  redirectTo(`/${locale}/`, 302, ctx.res);
+  redirectTo(`/${locale}/visitor/register`, 302, ctx.res);
   return {};
 };
 

@@ -66,7 +66,7 @@ var IndexPage = function IndexPage() {
 
 /***/ }),
 
-/***/ 4:
+/***/ 3:
 /*!********************************************************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2F%5Blocale%5D&absolutePagePath=%2FUsers%2Fstephangilli%2Fprojects%2Fbesuchernachweis%2Ffrontend%2Fpages%2F%5Blocale%5D%2Findex.tsx ***!
   \********************************************************************************************************************************************************************************/
@@ -89,5 +89,5 @@ module.exports = dll_2adc2403d89adc16ead0;
 
 /***/ })
 
-},[[4,"static/runtime/webpack.js"]]]);
+},[[3,"static/runtime/webpack.js"]]]);
 //# sourceMappingURL=[locale].js.map
