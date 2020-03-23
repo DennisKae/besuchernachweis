@@ -29,7 +29,7 @@ namespace Backend.WebApi.Controllers
         /// <summary>Liefert alle Besucher</summary>
         [Route("[action]")]
         [HttpPost]
-        public IActionResult ByFilter(BesucherFilterViewModel besucherFilterViewModel)
+        public IActionResult GetByFilter(BesucherFilterViewModel besucherFilterViewModel)
         {
             return Execute(() =>
             {
