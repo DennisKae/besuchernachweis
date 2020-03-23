@@ -17,11 +17,11 @@ namespace Backend.Data.Models
 
         public int BesucherId { get; set; }
 
-        public Besucher Besucher { get; set; }
+        public virtual Besucher Besucher { get; set; }
 
 
         public int BesuchId { get; set; }
 
-        public Besuch Besuch { get; set; }
+        public virtual Besuch Besuch { get; set; }
     }
 }

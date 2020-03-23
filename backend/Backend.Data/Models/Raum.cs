@@ -18,6 +18,6 @@ namespace Backend.Data.Models
 
         public int GebaeudeId { get; set; }
 
-        public Gebaeude Gebaeude { get; set; }
+        public virtual Gebaeude Gebaeude { get; set; }
     }
 }

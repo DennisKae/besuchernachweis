@@ -16,6 +16,6 @@ namespace Backend.Data.Models
 
         public string Bezeichnung { get; set; }
 
-        public List<Raum> Raeume { get; set; }
+        public virtual List<Raum> Raeume { get; set; }
     }
 }

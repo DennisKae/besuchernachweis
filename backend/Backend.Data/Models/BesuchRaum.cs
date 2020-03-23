@@ -16,10 +16,10 @@ namespace Backend.Data.Models
 
         public int BesuchId { get; set; }
 
-        public Besuch Besuch { get; set; }
+        public virtual Besuch Besuch { get; set; }
 
 
         public int RaumId { get; set; }
-        public Raum Raum { get; set; }
+        public virtual Raum Raum { get; set; }
     }
 }
