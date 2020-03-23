@@ -21,6 +21,11 @@ namespace Backend.Core.Repositories
             _databaseContext.Add(besucher);
         }
 
+        public void Update(Besucher besucher)
+        {
+            _databaseContext.Update(besucher);
+        }
+
         public Besucher GetBesucherById(int id) => _databaseContext.Besucher.FirstOrDefault(x => x.Id == id);
 
         public List<Besucher> GetBesucherByBesuch(List<Besuch> besuche)
@@ -85,7 +90,6 @@ namespace Backend.Core.Repositories
                 query = query.Where(x => x.Besuch != null && x.Besuch.Endzeit <= filter.Endzeit.Value);
             }
 
-
             if (filter.Skip.HasValue)
             {
                 query = query.Skip(filter.Skip.Value);
@@ -97,8 +101,8 @@ namespace Backend.Core.Repositories
             }
 
             return query
+                .Include(x => x.Besucher.Person)
                 .Select(x => x.Besucher)
-                .Include(x => x.Person)
                 .ToList();
         }
     }

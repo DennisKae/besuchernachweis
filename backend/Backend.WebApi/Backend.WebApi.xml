@@ -16,14 +16,17 @@
         <member name="M:Backend.WebApi.Controllers.BesuchController.ByBesucher(System.Int32)">
             <summary>Liefert alle Besuche eines Besuchers</summary>
         </member>
-        <member name="M:Backend.WebApi.Controllers.BesucherController.ByFilter(Backend.Core.ViewModels.BesucherFilterViewModel)">
-            <summary>Liefert alle Besucher</summary>
+        <member name="M:Backend.WebApi.Controllers.BesucherController.GetByFilter(Backend.Core.ViewModels.BesucherFilterViewModel)">
+            <summary>Liefert alle Besucher, die dem Filter entsprechen</summary>
         </member>
         <member name="M:Backend.WebApi.Controllers.BesucherController.AktiveBesucher">
             <summary>Liefert die Anzahl der aktiven Besucher</summary>
         </member>
         <member name="M:Backend.WebApi.Controllers.BesucherController.Create(Backend.Core.ViewModels.BesucherViewModel)">
-            <summary>Erstellt einen neuen Besucher.</summary>
+            <summary>Erstellt einen neuen Besucher</summary>
+        </member>
+        <member name="M:Backend.WebApi.Controllers.BesucherController.Update(Backend.Core.ViewModels.BesucherViewModel)">
+            <summary>Aktualisiert einen Besucher</summary>
         </member>
         <member name="M:Backend.WebApi.Controllers.GebaeudeController.GetAll">
             <summary>Liefert alle Gebäude mit allen Räumen.</summary>

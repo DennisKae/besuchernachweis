@@ -8,5 +8,6 @@ namespace Backend.Core.Services.Interfaces
         int GetAnzahlAktiverBesucher();
         BesucherViewModel Create(BesucherViewModel besucherViewModel);
         List<BesucherViewModel> GetByFilterViewModel(BesucherFilterViewModel besucherFilterViewModel);
+        BesucherViewModel Update(BesucherViewModel besucherViewModel);
     }
 }

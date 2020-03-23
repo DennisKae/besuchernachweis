@@ -13,4 +13,10 @@
     <ProjectReference Include="..\Backend.Data\Backend.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="translations.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

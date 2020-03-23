@@ -26,7 +26,7 @@ namespace Backend.WebApi.Controllers
             _besucherService = besucherService;
         }
 
-        /// <summary>Liefert alle Besucher</summary>
+        /// <summary>Liefert alle Besucher, die dem Filter entsprechen</summary>
         [Route("[action]")]
         [HttpPost]
         public IActionResult GetByFilter(BesucherFilterViewModel besucherFilterViewModel)
@@ -48,7 +48,7 @@ namespace Backend.WebApi.Controllers
             });
         }
 
-        /// <summary>Erstellt einen neuen Besucher.</summary>
+        /// <summary>Erstellt einen neuen Besucher</summary>
         [Route("")]
         [HttpPost]
         [ProducesResponseType(typeof(BesucherViewModel), StatusCodes.Status200OK)]
@@ -57,6 +57,18 @@ namespace Backend.WebApi.Controllers
             return Execute(() =>
             {
                 return _besucherService.Create(besucherViewModel);
+            });
+        }
+
+        /// <summary>Aktualisiert einen Besucher</summary>
+        [Route("")]
+        [HttpPut]
+        [ProducesResponseType(typeof(BesucherViewModel), StatusCodes.Status200OK)]
+        public IActionResult Update(BesucherViewModel besucherViewModel)
+        {
+            return Execute(() =>
+            {
+                return _besucherService.Update(besucherViewModel);
             });
         }
     }
